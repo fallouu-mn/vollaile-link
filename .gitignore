@@ -13,6 +13,9 @@ CLAUDE.md
 FRONTEND_FIXES_SUMMARY.md
 PHASE_3_SUMMARY.md
 
+### Docker interdit pour ce projet — le fichier ne doit pas figurer au dépôt
+docker-compose.yml
+
 ### Outils embarqués (non versionnés : on installe depuis le dépôt officiel)
 apache-maven-*/
 backend/apache-maven-*/
