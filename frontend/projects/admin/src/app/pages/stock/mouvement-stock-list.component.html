@@ -1,0 +1,96 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Journal des mouvements de stock</span>
+    <span class="spacer"></span>
+    <button mat-stroked-button (click)="exportCsv()" [disabled]="isExporting"
+            matTooltip="Exporter l'état du stock par offre (journalisé)">
+      <mat-icon>download</mat-icon>
+      Exporter le stock
+    </button>
+    <button mat-icon-button (click)="loadData()" matTooltip="Actualiser" aria-label="Actualiser">
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <mat-form-field appearance="fill">
+      <mat-label>Rechercher</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher dans la liste...">
+    </mat-form-field>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <div class="info-banner">
+      <mat-icon>info</mat-icon>
+      <span>
+        Le stock est suivi par offre : <strong>disponible = total &minus; réservé &minus; vendu</strong>.
+        Une réservation baisse le disponible, une vente transforme la réservation en vente définitive.
+      </span>
+    </div>
+
+    <div class="error-banner" *ngIf="errorMessage">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage }}</span>
+      <button mat-button (click)="loadData()">Réessayer</button>
+    </div>
+
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+      </ng-container>
+
+      <!-- Type Mouvement Column -->
+      <ng-container matColumnDef="typeMouvement">
+        <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="type-badge" [style.backgroundColor]="getTypeMouvementColor(element.typeMouvement)">
+            {{getTypeMouvementLabel(element.typeMouvement)}}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Offre Column -->
+      <ng-container matColumnDef="offre">
+        <mat-header-cell *matHeaderCellDef> Offre </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getOffreLabel(element)}}</mat-cell>
+      </ng-container>
+
+      <!-- Quantite Column -->
+      <ng-container matColumnDef="quantite">
+        <mat-header-cell *matHeaderCellDef> Quantité </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.quantite}} </mat-cell>
+      </ng-container>
+
+      <!-- Stock disponible après mouvement -->
+      <ng-container matColumnDef="quantiteApresMouvement">
+        <mat-header-cell *matHeaderCellDef> Disponible après </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.quantiteApresMouvement}} </mat-cell>
+      </ng-container>
+
+      <!-- Reference Column -->
+      <ng-container matColumnDef="referenceInfo">
+        <mat-header-cell *matHeaderCellDef> Référence </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getReferenceInfo(element)}}</mat-cell>
+      </ng-container>
+
+      <!-- Motif Column -->
+      <ng-container matColumnDef="motif">
+        <mat-header-cell *matHeaderCellDef> Motif </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.motif}} </mat-cell>
+      </ng-container>
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.createdAt | date:'short'}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

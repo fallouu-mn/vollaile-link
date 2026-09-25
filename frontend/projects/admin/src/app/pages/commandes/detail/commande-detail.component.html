@@ -1,0 +1,137 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Détail de la commande</span>
+    <span class="spacer"></span>
+    <button mat-button color="primary" routerLink="../">
+      <mat-icon>arrow_back</mat-icon>
+      Retour à la liste
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <div *ngIf="commande; else loadingTemplate">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Commande #{{ commande.id }}</mat-card-title>
+          <mat-card-subtitle>
+            Statut: <app-badge [text]="commande.statut" [variant]="getStatutVariant(commande.statut)"></app-badge>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Client:</label>
+              <span>{{ client?.nom }} {{ client?.prenom }}</span>
+            </div>
+            <div class="info-item">
+              <label>Téléphone:</label>
+              <span>{{ client?.telephone }}</span>
+            </div>
+            <div class="info-item">
+              <label>Email:</label>
+              <span>{{ client?.email }}</span>
+            </div>
+            <div class="info-item">
+              <label>Produit:</label>
+              <span>{{ produit?.name }}</span>
+            </div>
+            <div class="info-item">
+              <label>Quantité:</label>
+              <span>{{ commande.quantite }}</span>
+            </div>
+            <div class="info-item">
+              <label>Prix unitaire (FCFA):</label>
+              <span>{{ commande.prixUnitaire }}</span>
+            </div>
+            <div class="info-item">
+              <label>Remise (%):</label>
+              <span>{{ commande.remisePourcentage }}</span>
+            </div>
+            <div class="info-item">
+              <label>Remise (montant):</label>
+              <span>{{ commande.remiseMontant }}</span>
+            </div>
+            <div class="info-item">
+              <label>Total HT:</label>
+              <span>{{ commande.totalHt | number:'1.0-0' }} FCFA</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card *ngIf="mouvements.length > 0">
+        <mat-card-header>
+          <mat-card-title>Mouvements de stock liés</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-table [dataSource]="mouvements" class="mat-elevation-z8">
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+              <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="typeMouvement">
+              <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+              <mat-cell *matCellDef="let element">{{element.typeMouvement}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="quantite">
+              <mat-header-cell *matHeaderCellDef> Quantité </mat-header-cell>
+              <mat-cell *matCellDef="let element">{{element.quantite}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="createdAt">
+              <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+              <mat-cell *matCellDef="let element">{{element.createdAt | date:'short'}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="['id', 'typeMouvement', 'quantite', 'createdAt']"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: ['id', 'typeMouvement', 'quantite', 'createdAt'];"></mat-row>
+          </mat-table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Actions</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="actions">
+            <button mat-flat-button color="primary" *ngIf="commande.statut !== 'PAYEE'" (click)="updateStatut('PAYEE', '')">
+              <mat-icon>check_circle</mat-icon>
+              Marquer comme payé
+            </button>
+            <button mat-flat-button color="primary" *ngIf="commande.statut === 'PAYEE'" (click)="updateStatut('EN_PREPARATION', '')">
+              <mat-icon>access_time</mat-icon>
+              Préparer
+            </button>
+            <button mat-flat-button color="primary" *ngIf="commande.statut === 'EN_PREPARATION'" (click)="updateStatut('EXPEDIEE', '')">
+              <mat-icon>local_shipping</mat-icon>
+              Expédier
+            </button>
+            <button mat-flat-button color="primary" *ngIf="commande.statut === 'EXPEDIEE'" (click)="updateStatut('LIVREE', '')">
+              <mat-icon>done</mat-icon>
+              Livrer
+            </button>
+            <button mat-flat-button color="warn" *ngIf="commande.statut !== 'ANNULEE'" (click)="updateStatut('ANNULEE', '')">
+              <mat-icon>cancel</mat-icon>
+              Annuler
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <ng-template #loadingTemplate>
+      <mat-card>
+        <mat-card-content>
+          <mat-spinner diameter="48"></mat-spinner>
+          <p>Chargement de la commande...</p>
+        </mat-card-content>
+      </mat-card>
+    </ng-template>
+  </div>
+</div>

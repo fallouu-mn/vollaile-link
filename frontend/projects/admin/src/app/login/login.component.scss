@@ -1,0 +1,315 @@
+// =============================================================
+// Login Page — Vollaile Link Back-office
+// =============================================================
+
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// --- Panneau gauche (décoratif) --------------------------------
+.login-visual {
+  background: linear-gradient(
+    145deg,
+    var(--color-primary-700) 0%,
+    var(--color-primary-900) 60%,
+    #0b1a0f 100%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-16) var(--space-12);
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
+
+  // Orbes décoratifs
+  &::before {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(74,222,128,.15) 0%, transparent 70%);
+    top: -80px;
+    right: -100px;
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(245,158,11,.1) 0%, transparent 70%);
+    bottom: -60px;
+    left: -80px;
+    border-radius: 50%;
+  }
+
+  .visual-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-16);
+    animation: fadeInLeft var(--transition-slow) both;
+
+    .logo-emoji {
+      font-size: 40px;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,.3));
+    }
+
+    .logo-text {
+      .logo-name {
+        font-size: var(--text-2xl);
+        font-weight: var(--font-bold);
+        color: #fff;
+        letter-spacing: -.02em;
+      }
+      .logo-tagline {
+        font-size: var(--text-sm);
+        color: rgba(255,255,255,.45);
+      }
+    }
+  }
+
+  .visual-headline {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-extrabold);
+    color: #fff;
+    line-height: 1.15;
+    letter-spacing: -.03em;
+    margin-bottom: var(--space-5);
+    animation: fadeInLeft var(--transition-slow) 100ms both;
+
+    em {
+      font-style: normal;
+      color: var(--color-primary-400);
+    }
+  }
+
+  .visual-desc {
+    font-size: var(--text-lg);
+    color: rgba(255,255,255,.55);
+    line-height: 1.6;
+    max-width: 380px;
+    animation: fadeInLeft var(--transition-slow) 200ms both;
+  }
+
+  .visual-stats {
+    display: flex;
+    gap: var(--space-8);
+    margin-top: var(--space-12);
+    animation: fadeInLeft var(--transition-slow) 300ms both;
+
+    .stat {
+      .stat-val {
+        font-size: var(--text-3xl);
+        font-weight: var(--font-bold);
+        color: #fff;
+      }
+      .stat-lbl {
+        font-size: var(--text-xs);
+        color: rgba(255,255,255,.4);
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
+    }
+  }
+}
+
+// --- Panneau droit (formulaire) --------------------------------
+.login-form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  background: var(--surface-bg);
+
+  animation: fadeIn .4s ease both;
+}
+
+.login-form-wrap {
+  width: 100%;
+  max-width: 420px;
+
+  // Mobile : afficher un mini-logo
+  .mobile-logo {
+    display: none;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-8);
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+
+    @media (max-width: 900px) { display: flex; }
+  }
+}
+
+.form-heading {
+  margin-bottom: var(--space-8);
+
+  h1 {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    letter-spacing: -.02em;
+    margin-bottom: var(--space-2);
+  }
+
+  p {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+}
+
+.form-field {
+  margin-bottom: var(--space-5);
+
+  label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+  }
+
+  .input-wrap {
+    position: relative;
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: var(--color-gray-400);
+      pointer-events: none;
+      transition: color var(--transition-fast);
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--border-radius);
+      font-size: var(--text-base);
+      font-family: var(--font-sans);
+      color: var(--text-primary);
+      background: var(--surface-card);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      outline: none;
+      box-sizing: border-box;
+
+      &::placeholder { color: var(--text-muted); }
+
+      &:focus {
+        border-color: var(--color-primary-500);
+        box-shadow: 0 0 0 3px rgba(34,197,94,.12);
+
+        ~ .input-icon { color: var(--color-primary-500); }
+      }
+
+      &.error {
+        border-color: var(--color-danger-500);
+        &:focus { box-shadow: 0 0 0 3px rgba(239,68,68,.12); }
+      }
+    }
+
+    .eye-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: var(--color-gray-400);
+      display: flex;
+      transition: color var(--transition-fast);
+      &:hover { color: var(--color-gray-600); }
+    }
+  }
+
+  .field-error {
+    margin-top: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--color-danger-500);
+    font-weight: var(--font-medium);
+    animation: fadeInDown .15s ease both;
+  }
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--color-primary-500);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+  margin-top: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  box-shadow: 0 4px 16px rgba(34,197,94,.3);
+
+  &:hover:not(:disabled) {
+    background: var(--color-primary-600);
+    box-shadow: 0 6px 24px rgba(34,197,94,.4);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(.98);
+  }
+
+  &:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .btn-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+}
+
+.form-error-global {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: var(--border-radius);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  border-left: 3px solid var(--color-danger-500);
+  animation: fadeInDown .2s ease both;
+}

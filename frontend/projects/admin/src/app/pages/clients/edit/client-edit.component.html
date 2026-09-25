@@ -1,0 +1,154 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Modifier le client</span>
+    <span class="spacer"></span>
+    <button mat-button color="primary" routerLink="../">
+      <mat-icon>arrow_back</mat-icon>
+      Retour à la liste
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="form">
+      <mat-grid-list cols="2" rowHeight="1:1" gutterSize="10px">
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Nom *</mat-label>
+            <input matInput formControlName="nom" required>
+            <mat-error *ngIf="f['nom'].hasError('required')">
+              Le nom est requis
+            </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Prénom *</mat-label>
+            <input matInput formControlName="prenom" required>
+            <mat-error *ngIf="f['prenom'].hasError('required')">
+              Le prénom est requis
+            </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Téléphone *</mat-label>
+            <input matInput formControlName="telephone" required>
+            <mat-error *ngIf="f['telephone'].hasError('required')">
+              Le téléphone est requis
+            </mat-error>
+            <mat-error *ngIf="f['telephone'].hasError('pattern')">
+              Le téléphone doit être au format +221XXXXXXX
+            </mat-error>
+            <mat-error *ngIf="telephoneExistsError">
+              Ce numéro de téléphone existe déjà
+            </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngIf="f['email'].hasError('email')">
+              L'email n'est pas valide
+            </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="adresse">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Ville</mat-label>
+            <input matInput formControlName="ville">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Région</mat-label>
+            <input matInput formControlName="region">
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Date de naissance</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dateNaissance">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Sexe</mat-label>
+            <mat-select formControlName="sexe">
+              <mat-option value="">-- Sélectionner --</mat-option>
+              <mat-option value="M">Masculin</mat-option>
+              <mat-option value="F">Féminin</mat-option>
+              <mat-option value="AUTRE">Autre</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Professionnel</mat-label>
+            <mat-checkbox formControlName="professionnel">
+              Oui
+            </mat-checkbox>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Entreprise</mat-label>
+            <input matInput formControlName="entreprise">
+            <mat-error *ngIf="f['entreprise'].hasError('required')">
+              L'entreprise est requise pour les professionnels
+            </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Secteur d'activité</mat-label>
+            <input matInput formControlName="secteurActif">
+            <mat-error *ngIf="f['secteurActif'].hasError('required')">
+              Le secteur d'activité est requis pour les professionnels
+            </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="2">
+          <mat-form-field appearance="fill">
+            <mat-label>Actif</mat-label>
+            <mat-checkbox formControlName="isActive">
+              Oui
+            </mat-checkbox>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <div class="form-actions">
+        <button mat-flat-button color="primary" type="submit" [disabled]="isLoading">
+          <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
+          <span *ngIf="!isLoading">Enregistrer</span>
+        </button>
+        <button mat-button type="button" routerLink="../">
+          Annuler
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

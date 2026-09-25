@@ -1,0 +1,88 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Journal d'audit</span>
+    <span class="spacer"></span>
+    <button mat-stroked-button (click)="exportCsv()" [disabled]="isExporting"
+            matTooltip="Exporter le journal filtré (l'export est lui-même journalisé)">
+      <mat-icon>download</mat-icon>
+      Exporter
+    </button>
+    <button mat-icon-button (click)="loadLog()" matTooltip="Actualiser" aria-label="Actualiser">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <div class="info-banner">
+      <mat-icon>shield</mat-icon>
+      <span>
+        Piste d'audit des opérations métier (CDC §2.5) : mouvements de stock,
+        variations de prix, changements de statut et connexions.
+        Chaque entrée est écrite dans la <strong>même transaction</strong>
+        que l'opération : elle ne peut pas exister sans elle.
+      </span>
+    </div>
+
+    <div class="error-banner" *ngIf="errorMessage">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage }}</span>
+      <button mat-button (click)="loadLog()">Réessayer</button>
+    </div>
+
+    <div class="filters">
+      <mat-form-field appearance="fill">
+        <mat-label>Type d'événement</mat-label>
+        <mat-select [(ngModel)]="selectedType" (selectionChange)="onTypeChange()">
+          <mat-option *ngFor="let t of eventTypes" [value]="t.value">{{ t.label }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Rechercher</mat-label>
+        <input matInput [(ngModel)]="filterText" placeholder="Description, acteur, type...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && !errorMessage && filteredEntries.length === 0">
+      <mat-icon>history</mat-icon>
+      <p>Aucun événement enregistré pour ce filtre.</p>
+    </div>
+
+    <div class="audit-list" *ngIf="!isLoading && filteredEntries.length > 0">
+      <div class="audit-entry" *ngFor="let entry of filteredEntries"
+           [class.expanded]="expandedId === entry.id">
+
+        <div class="entry-header" (click)="toggleMetadata(entry)">
+          <span class="event-badge" [ngClass]="getEventClass(entry.eventType)">
+            {{ getEventLabel(entry.eventType) }}
+          </span>
+
+          <span class="entry-description">{{ entry.eventDescription || '—' }}</span>
+
+          <span class="entry-actor" *ngIf="entry.administratorPhone">
+            <mat-icon class="icon-xs">person</mat-icon>
+            {{ entry.administratorPhone }}
+          </span>
+          <span class="entry-actor entry-system" *ngIf="!entry.administratorPhone"
+                matTooltip="Traitement automatique (planificateur)">
+            <mat-icon class="icon-xs">schedule</mat-icon>
+            système
+          </span>
+
+          <span class="entry-ip" *ngIf="entry.ipAddress">{{ entry.ipAddress }}</span>
+
+          <span class="entry-date">{{ formatDate(entry.eventTimestamp) }}</span>
+
+          <mat-icon class="expand-icon">
+            {{ expandedId === entry.id ? 'expand_less' : 'expand_more' }}
+          </mat-icon>
+        </div>
+
+        <pre class="metadata" *ngIf="expandedId === entry.id && entry.metadata">{{ prettyMetadata(entry.metadata) }}</pre>
+      </div>
+    </div>
+  </div>
+</div>

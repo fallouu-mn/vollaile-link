@@ -1,0 +1,38 @@
+<div class="faq-page">
+  <header class="page-header">
+    <h1>Foire Aux Questions (FAQ)</h1>
+  </header>
+
+  <!-- Error message -->
+  <div class="alert alert-error" *ngIf="errorMessage && !isLoading">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Loading indicator -->
+  <div class="loading-indicator" *ngIf="isLoading && !faqs.length">
+    <div class="spinner"></div>
+    <p>Chargement des FAQ...</p>
+  </div>
+
+  <!-- FAQ list -->
+  <section class="faq-list" *ngIf="!isLoading && faqs.length > 0">
+    <div class="container">
+      <div class="faq-item" *ngFor="let faq of faqs">
+        <div class="faq-question" (click)="toggleFaq(faq.id)" [class.active]="isFaqOpen(faq.id)">
+          <h3>{{ faq.question }}</h3>
+          <button class="faq-toggle" [attr.aria-expanded]="isFaqOpen(faq.id)" [attr.aria-controls]="'faq-answer-' + faq.id">
+            <i class="fas" [class.fa-chevron-down]="!isFaqOpen(faq.id)" [class.fa-chevron-up]="isFaqOpen(faq.id)"></i>
+          </button>
+        </div>
+        <div class="faq-answer" id="faq-answer-{{ faq.id }}" [hidden]="!isFaqOpen(faq.id)">
+          <p>{{ faq.answer }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- No FAQs -->
+  <div class="no-faqs" *ngIf="!isLoading && faqs.length === 0">
+    <p>Aucune FAQ disponible pour le moment.</p>
+  </div>
+</div>

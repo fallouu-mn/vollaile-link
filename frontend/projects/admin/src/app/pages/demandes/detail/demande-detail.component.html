@@ -1,0 +1,172 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Détail de la demande</span>
+    <span class="spacer"></span>
+    <button mat-button color="primary" routerLink="../">
+      <mat-icon>arrow_back</mat-icon>
+      Retour à la liste
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <mat-card *ngIf="demande">
+      <mat-card-header>
+        <mat-card-title>Demande #{{
+          demande.id
+        }}</mat-card-title>
+        <mat-card-subtitle>
+          {{ demande.createdAt | date:'short' }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <h3>Client</h3>
+            <p><strong>{{ client?.prenom }} {{ client?.nom }}</strong></p>
+            <p>{{ client?.telephone }}</p>
+            <p *ngIf="client?.email">{{ client?.email }}</p>
+          </div>
+
+          <div class="info-item">
+            <h3>Produit</h3>
+            <p><strong>{{ produit?.name }}</strong></p>
+            <p *ngIf="produit?.description">{{ produit?.description }}</p>
+            <p *ngIf="produit?.defaultUnitPrice">
+              Prix indicatif: {{ produit?.defaultUnitPrice }} FCFA / {{ produit?.unitType }}
+            </p>
+            <p *ngIf="produit">
+              Stock disponible: {{ produit.stock?.available ?? 0 }} / {{ produit.stock?.total ?? 0 }}
+              (dont {{ produit.stock?.reserved ?? 0 }} réservé(s))
+            </p>
+          </div>
+
+          <div class="info-item">
+            <h3>Détails de la demande</h3>
+            <p><strong>Quantité souhaitée:</strong> {{ demande.quantiteSouhaitee }}</p>
+            <p *ngIf="demande.prixUnitaireSouhaite">
+              <strong>Prix unitaire souhaité:</strong> {{ demande.prixUnitaireSouhaite }} FCFA
+            </p>
+            <p *ngIf="demande.nomProduit">
+              <strong>Nom du produit:</strong> {{ demande.nomProduit }}
+            </p>
+            <p *ngIf="demande.description">
+              <strong>Description:</strong> {{ demande.description }}
+            </p>
+            <p><strong>Date souhaitée:</strong> {{ demande.dateSouhaitee | date:'short' }}</p>
+            <p><strong>Lieu de livraison:</strong> {{ demande.lieuLivraison }}</p>
+          </div>
+
+          <div class="info-item">
+            <h3>Statut</h3>
+            <app-badge
+              [text]="demande.statut || ''"
+              [variant]="getStatutVariant(demande.statut || '')"
+            ></app-badge>
+          </div>
+        </div>
+
+        <!-- Status Change Section -->
+        <div *ngIf="!isConverting">
+          <mat-divider></mat-divider>
+          <h3>Changer le statut</h3>
+          <form [formGroup]="statusForm" (ngSubmit)="onSubmitStatusChange()">
+            <mat-form-field appearance="fill">
+              <mat-label>Nouveau statut *</mat-label>
+              <mat-select formControlName="statut" required>
+                <mat-option value="EN_COURS">En cours</mat-option>
+                <mat-option value="VALIDEE">Validée</mat-option>
+                <mat-option value="REFUSEE">Refusée</mat-option>
+                <mat-option value="EXPIREE">Expirée</mat-option>
+                <mat-option value="SANS_SUITE">Sans suite</mat-option>
+              </mat-select>
+              <mat-error *ngIf="statusForm.get('statut')?.hasError('required')">
+                Le statut est requis
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Commentaires administratifs</mat-label>
+              <textarea matInput formControlName="commentairesAdmin"></textarea>
+            </mat-form-field>
+
+            <div class="form-actions">
+              <button
+                mat-flat-button
+                color="primary"
+                type="submit"
+                [disabled]="isLoading || statusForm.invalid"
+              >
+                <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
+                <span *ngIf="!isLoading">Enregistrer</span>
+              </button>
+              <button
+                mat-button
+                color="warn"
+                type="button"
+                routerLink="../"
+              >
+                Annuler
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Convert to Commande Button -->
+        <div *ngIf="demande.statut === 'VALIDEE' && !isConverting">
+          <mat-divider></mat-divider>
+          <button
+            mat-flat-button
+            color="success"
+            (click)="convertToCommande()"
+            [disabled]="isConverting"
+          >
+            <mat-icon *ngIf="isConverting">hourglass_empty</mat-icon>
+            <span *ngIf="!isConverting">Convertir en commande</span>
+          </button>
+        </div>
+
+        <!-- Stock Movements Section -->
+        <div *ngIf="mouvements.length > 0">
+          <mat-divider></mat-divider>
+          <h3>Mouvements de stock liés</h3>
+          <mat-table [dataSource]="mouvements" class="mat-elevation-z8">
+            <!-- Type Column -->
+            <ng-container matColumnDef="type">
+              <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <span class="type-badge"
+                  [style.backgroundColor]="getMouvementTypeColor(element.typeMouvement)"
+                  [style.color]="getMouvementTypeColor(element.typeMouvement) === '#ffffff' ? '#000000' : '#ffffff'">
+                  {{ getMouvementTypeLabel(element.typeMouvement) }}
+                </span>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Quantity Column -->
+            <ng-container matColumnDef="quantite">
+              <mat-header-cell *matHeaderCellDef> Quantité </mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.quantite }}</mat-cell>
+            </ng-container>
+
+            <!-- Motif Column -->
+            <ng-container matColumnDef="motif">
+              <mat-header-cell *matHeaderCellDef> Motif </mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.motif }}</mat-cell>
+            </ng-container>
+
+            <!-- Date Column -->
+            <ng-container matColumnDef="createdAt">
+              <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.createdAt | date:'short' }}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedMouvementColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedMouvementColumns;"></mat-row>
+          </mat-table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

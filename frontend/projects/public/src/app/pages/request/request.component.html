@@ -1,0 +1,141 @@
+<div class="request-page">
+  <header class="page-header">
+    <h1>Demande de devis</h1>
+    <p class="subtitle">Envoyez votre besoin à Vollaile Link : nous vérifions la disponibilité et les conditions avant de confirmer.</p>
+  </header>
+
+  <div class="alert alert-error" *ngIf="errorMessage && !isSubmitting">
+    {{ errorMessage }}
+  </div>
+
+  <div class="alert alert-success" *ngIf="submitSuccess && !isSubmitting">
+    Votre demande a bien été enregistrée.
+  </div>
+
+  <form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="request-form" novalidate>
+    <div class="form-group">
+      <label for="nom">Nom *</label>
+      <input type="text" id="nom" formControlName="nom" class="form-control"
+             [class.is-invalid]="requestForm.get('nom')?.invalid && requestForm.get('nom')?.touched">
+      <div class="invalid-feedback" *ngIf="requestForm.get('nom')?.invalid && requestForm.get('nom')?.touched">
+        Le nom est obligatoire et doit contenir au moins 2 caractères.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="prenom">Prénom *</label>
+      <input type="text" id="prenom" formControlName="prenom" class="form-control"
+             [class.is-invalid]="requestForm.get('prenom')?.invalid && requestForm.get('prenom')?.touched">
+      <div class="invalid-feedback" *ngIf="requestForm.get('prenom')?.invalid && requestForm.get('prenom')?.touched">
+        Le prénom est obligatoire et doit contenir au moins 2 caractères.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="typeClient">Type de client *</label>
+      <select id="typeClient" formControlName="typeClient" class="form-control">
+        <option *ngFor="let type of clientTypes" [value]="type.value">{{ type.label }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="telephone">Téléphone *</label>
+      <input type="tel" id="telephone" formControlName="telephone" class="form-control"
+             placeholder="+221771234567"
+             [class.is-invalid]="requestForm.get('telephone')?.invalid && requestForm.get('telephone')?.touched">
+      <div class="invalid-feedback" *ngIf="requestForm.get('telephone')?.invalid && requestForm.get('telephone')?.touched">
+        Veuillez entrer un numéro sénégalais valide, par exemple +221771234567.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input type="email" id="email" formControlName="email" class="form-control"
+             [class.is-invalid]="requestForm.get('email')?.invalid && requestForm.get('email')?.touched">
+      <div class="invalid-feedback" *ngIf="requestForm.get('email')?.invalid && requestForm.get('email')?.touched">
+        Veuillez entrer une adresse email valide.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="zoneLivraison">Zone de livraison *</label>
+      <select id="zoneLivraison" formControlName="zoneLivraison" class="form-control">
+        <option *ngFor="let zone of deliveryZones" [value]="zone">{{ zone }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="nomProduit">Produit souhaité *</label>
+      <input type="text" id="nomProduit" formControlName="nomProduit" class="form-control"
+             placeholder="Ex. poulet de chair, dinde..."
+             [class.is-invalid]="requestForm.get('nomProduit')?.invalid && requestForm.get('nomProduit')?.touched">
+      <div class="invalid-feedback" *ngIf="requestForm.get('nomProduit')?.invalid && requestForm.get('nomProduit')?.touched">
+        Indiquez le produit souhaité.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="quantiteSouhaitee">Quantité souhaitée *</label>
+      <input type="number" id="quantiteSouhaitee" formControlName="quantiteSouhaitee" class="form-control" min="1"
+             [class.is-invalid]="requestForm.get('quantiteSouhaitee')?.invalid && requestForm.get('quantiteSouhaitee')?.touched">
+      <div class="invalid-feedback" *ngIf="requestForm.get('quantiteSouhaitee')?.invalid && requestForm.get('quantiteSouhaitee')?.touched">
+        La quantité doit être supérieure à zéro.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="poidsSouhaite">Poids souhaité (kg, facultatif)</label>
+      <input type="number" id="poidsSouhaite" formControlName="poidsSouhaite" class="form-control" min="0.01" step="0.01">
+    </div>
+
+    <div class="form-group">
+      <label for="dateSouhaitee">Date souhaitée *</label>
+      <input type="date" id="dateSouhaitee" formControlName="dateSouhaitee" class="form-control" [min]="today"
+             [class.is-invalid]="requestForm.get('dateSouhaitee')?.invalid && requestForm.get('dateSouhaitee')?.touched">
+      <div class="invalid-feedback" *ngIf="requestForm.get('dateSouhaitee')?.invalid && requestForm.get('dateSouhaitee')?.touched">
+        Indiquez une date aujourd'hui ou ultérieure.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="preferenceContact">Préférence de contact</label>
+      <select id="preferenceContact" formControlName="preferenceContact" class="form-control">
+        <option *ngFor="let preference of contactPreferences" [value]="preference.value">{{ preference.label }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="adresseLivraison">Adresse de livraison (facultatif)</label>
+      <input type="text" id="adresseLivraison" formControlName="adresseLivraison" class="form-control"
+             placeholder="Quartier, repère ou adresse complète">
+    </div>
+
+    <div class="form-group">
+      <label for="message">Message (facultatif)</label>
+      <textarea id="message" formControlName="message" class="form-control" rows="5"
+                placeholder="Précisez la quantité, le format ou les contraintes de livraison."></textarea>
+    </div>
+
+    <div class="honeypot-field" [hidden]="true">
+      <label>Laissez ce champ vide</label>
+      <input type="text" formControlName="honeypot" name="honeypot" tabindex="-1" autocomplete="off">
+    </div>
+
+    <div class="form-group consent-group">
+      <label class="consent-label">
+        <input type="checkbox" formControlName="consentement">
+        <span>J’accepte que Vollaile Link utilise ces informations pour traiter ma demande. *</span>
+      </label>
+      <div class="invalid-feedback" *ngIf="requestForm.get('consentement')?.invalid && requestForm.get('consentement')?.touched">
+        Vous devez accepter la politique de confidentialité.
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary btn-lg" [disabled]="isSubmitting">
+        <span *ngIf="isSubmitting">Envoi en cours...</span>
+        <span *ngIf="!isSubmitting">Envoyer ma demande à Vollaile Link</span>
+      </button>
+    </div>
+  </form>
+</div>

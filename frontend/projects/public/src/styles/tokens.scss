@@ -1,0 +1,164 @@
+// =============================================================
+// VOLLAILE LINK — Design Tokens (site public)
+// Direction artistique : « Le lot »
+//
+// Le vocabulaire visuel vient du marché de gros de Dakar : on n'achète
+// pas un produit, on achète un LOT identifié, avec un poids et un prix.
+// D'où la palette encre / safran, et l'emploi d'une police monospace
+// pour toutes les données de négoce (prix, poids, quantités).
+//
+// L'ancien jeu de tokens utilisait --color-primary-500: #22c55e,
+// c'est-à-dire Tailwind green-500 : le vert le plus générique du marché.
+// Il est remplacé par une palette qui porte une intention.
+// =============================================================
+
+:root {
+  // --- Encres (fond, texte) ---
+  // Plume plutôt que gris neutre : un gris froid trahirait le sujet.
+  --ink:          #141019;
+  --ink-raised:   #1C1622;
+  --ink-line:     #2E2536;
+
+  --chalk:        #FCFBF9;   // blanc chaud, surface de lecture
+  --bone:         #F7F4EF;   // pierre calcaire, fond de section
+  --bone-deep:    #EFE9E0;
+
+  // --- Texte ---
+  --text-ink:     #141019;
+  --text-stone:   #6B6470;   // gris prune, pas neutre
+  --text-stone-2: #948C99;
+  --text-on-ink:  #F7F4EF;
+  --text-on-ink-2: rgba(247,244,239,.68);
+  --text-on-ink-3: rgba(247,244,239,.44);
+
+  // --- Safran : l'accent unique ---
+  // Aube sur le Sahel, épices, halal. Chaleureux mais pas « restaurant ».
+  --saffron:      #F2A33C;
+  --saffron-lit:  #FFBE5C;
+  --saffron-deep: #C97B1E;
+  --saffron-wash: rgba(242,163,60,.12);
+
+  // --- Pétrole : l'état « disponible » ---
+  // Fonctionnel : c'est la seule couleur qui signifie du stock vendable.
+  --petrol:       #2A9D8F;
+  --petrol-lit:   #3FBFAF;
+  --petrol-wash:  rgba(42,157,143,.12);
+
+  // --- Argile : l'état « épuisé » / vigilance ---
+  --clay:         #B4453A;
+  --clay-wash:    rgba(180,69,58,.12);
+
+  // Rétrocompatibilité : les anciens noms pointent sur la nouvelle palette,
+  // pour que les pages existantes ne cassent pas.
+  --color-primary-50:  var(--petrol-wash);
+  --color-primary-100: rgba(42,157,143,.18);
+  --color-primary-500: var(--petrol);
+  --color-primary-600: #238075;
+  --color-primary-700: #1B6459;
+  --color-accent-500:   var(--saffron);
+  --color-accent-600:   var(--saffron-deep);
+  --color-danger-500:   var(--clay);
+  --color-success-500:  var(--petrol);
+  --color-gray-50:  var(--bone);
+  --color-gray-100: var(--bone-deep);
+  --color-gray-200: #E2DCD2;
+  --color-gray-300: #CFC7BB;
+  --color-gray-400: #A79E92;
+  --color-gray-500: var(--text-stone);
+  --color-gray-600: #554E5A;
+  --color-gray-700: #3A3441;
+  --color-gray-800: #26202D;
+  --color-gray-900: var(--ink);
+
+  --surface-bg:   var(--chalk);
+  --surface-card: #FFFFFF;
+  --surface-muted: var(--bone);
+
+  --text-primary:   var(--text-ink);
+  --text-secondary: var(--text-stone);
+  --text-muted:     var(--text-stone-2);
+  --text-on-primary: #FFFFFF;
+
+  --border-color:  #E7E1D8;
+  --border-color-ink: var(--ink-line);
+
+  // --- Rayons : mesurés, jamais \"pilule\" partout ---
+  --border-radius-xs: 3px;
+  --border-radius-sm: 6px;
+  --border-radius:    10px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+
+  // --- Ombres ---
+  // Ombres chaudes : une ombre neutre gris sur un fond chaud parait sale.
+  --shadow-xs: 0 1px 2px rgba(41,28,20,.06);
+  --shadow-sm: 0 2px 8px rgba(41,28,20,.07);
+  --shadow-md: 0 4px 16px rgba(41,28,20,.09);
+  --shadow-lg: 0 12px 36px rgba(41,28,20,.13);
+  --shadow-ink: 0 20px 50px rgba(20,16,25,.35);
+
+  // --- Transitions ---
+  --transition-fast:   150ms cubic-bezier(.4,0,.2,1);
+  --transition-normal:  250ms cubic-bezier(.4,0,.2,1);
+  --transition-slow:    400ms cubic-bezier(.4,0,.2,1);
+  --transition-spring:  500ms cubic-bezier(.34,1.56,.64,1);
+  --ease-out-expo: cubic-bezier(.16,1,.3,1);
+
+  // --- Typographie ---
+  // Bricolage Grotesque : display caractère, terminals légèrement inhabituels.
+  // Instrument Sans : texte, très lisible en petit corps.
+  // JetBrains Mono : toute donnée de négoce (prix, poids, quantité).
+  --font-display: 'Bricolage Grotesque', 'Instrument Sans', system-ui, sans-serif;
+  --font-sans: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  // Échelle : ratio 1.25 (major tier), resserrée en tête.
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.375rem;
+  --text-5xl:  3.125rem;
+  --text-6xl:  4rem;
+  --text-7xl:  clamp(2.75rem, 7vw, 5.5rem);
+
+  --font-normal:    400;
+  --font-medium:    500;
+  --font-semibold:  600;
+  --font-bold:      700;
+  --font-extrabold: 800;
+
+  // --- Espacement ---
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  // --- Mise en page ---
+  --container-sm:  640px;
+  --container-md:  768px;
+  --container-lg:  1024px;
+  --container-xl:  1220px;
+  --container-2xl: 1440px;
+
+  --nav-height: 76px;
+
+  // Barre de progression de lecture, fixée sous l'en-tête.
+  --scroll-progress-height: 2px;
+
+  // Point focal : le safran n'existe que sur l'action principale
+  // et sur le meter de disponibilite. A Nowhere else.
+  --focus-ring: 0 0 0 3px rgba(242,163,60,.45);
+}

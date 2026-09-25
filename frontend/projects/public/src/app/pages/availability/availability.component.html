@@ -1,0 +1,122 @@
+<div class="availability-page">
+  <header class="page-header">
+    <h1>Disponibilités</h1>
+    <p class="page-subtitle">
+      Consultez les offres de volailles centralisées par Vollaile Link auprès de producteurs partenaires
+    </p>
+  </header>
+
+  <!-- Filters -->
+  <section class="filters-section">
+    <div class="container">
+      <form [formGroup]="filterForm" (ngSubmit)="onFilter()" class="filters-form">
+        <div class="filters-grid">
+          <div class="filter-group">
+            <label for="productName">Nom du produit</label>
+            <input type="text" id="productName" formControlName="productName" placeholder="Ex: poulet, dinde...">
+          </div>
+
+          <div class="filter-group">
+            <label for="minQuantity">Quantité minimale</label>
+            <input type="number" id="minQuantity" formControlName="minQuantity" placeholder="Ex: 10">
+          </div>
+
+          <div class="filter-group">
+            <label for="maxQuantity">Quantité maximale</label>
+            <input type="number" id="maxQuantity" formControlName="maxQuantity" placeholder="Ex: 1000">
+          </div>
+
+          <div class="filter-group">
+            <label for="minPrice">Prix minimum (FCFA)</label>
+            <input type="number" id="minPrice" formControlName="minPrice" placeholder="Ex: 1000">
+          </div>
+
+          <div class="filter-group">
+            <label for="maxPrice">Prix maximum (FCFA)</label>
+            <input type="number" id="maxPrice" formControlName="maxPrice" placeholder="Ex: 5000">
+          </div>
+
+          <div class="filter-group actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+              {{ isLoading ? 'Recherche...' : 'Rechercher' }}
+            </button>
+            <button type="button" class="btn btn-outline" (click)="onReset()">
+              Réinitialiser
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Error message -->
+  <div class="alert alert-error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Loading indicator -->
+  <div class="loading-indicator" *ngIf="isLoading && !offers.length">
+    <div class="spinner"></div>
+    <p>Chargement des offres...</p>
+  </div>
+
+  <!-- No results -->
+  <div class="no-results" *ngIf="!isLoading && offers.length === 0 && !errorMessage">
+    <p>Aucune offre ne correspond à vos critères de recherche.</p>
+  </div>
+
+  <!-- Offers list -->
+  <section class="offers-section" *ngIf="!isLoading && offers.length > 0">
+    <div class="container">
+      <h2>{{ filteredOffers.length }} offre{{ filteredOffers.length > 1 ? 's' : '' }} trouvée{{ filteredOffers.length > 1 ? 's' : '' }}</h2>
+
+      <div class="offers-grid">
+        <div class="offer-card" *ngFor="let offer of filteredOffers">
+          <div class="offer-header">
+            <h3>{{ offer.productName }}</h3>
+            <app-badge *ngIf="offer.status === 'ACTIVE'" text="Disponible" variant="success"></app-badge>
+          </div>
+
+          <div class="offer-body">
+            <p class="offer-description" *ngIf="offer.productDescription">
+              {{ offer.productDescription }}
+            </p>
+
+            <div class="offer-details">
+              <div class="detail-item">
+                <span class="detail-label">Prix unitaire:</span>
+                <span class="detail-value">{{ formatCurrency(offer.unitPrice) }} / {{ offer.unitType }}</span>
+              </div>
+
+              <div class="detail-item">
+                <span class="detail-label">Quantité disponible:</span>
+                <span class="detail-value">{{ offer.quantityAvailable }} {{ offer.unitType }}</span>
+              </div>
+
+              <div class="detail-item">
+                <span class="detail-label">Valeur totale:</span>
+                <span class="detail-value">{{ formatCurrency(offer.totalValue || 0) }}</span>
+              </div>
+
+              <div class="detail-item" *ngIf="offer.startsAt && offer.expiresAt">
+                <span class="detail-label">Période:</span>
+                <span class="detail-value">
+                  {{ formatDate(offer.startsAt) }} - {{ formatDate(offer.expiresAt) }}
+                </span>
+              </div>
+            </div>
+
+            <p class="offer-description" *ngIf="offer.description">
+              {{ offer.description }}
+            </p>
+          </div>
+
+          <div class="offer-actions">
+            <a class="btn btn-outline" [href]="'/offre/' + offer.id">Voir l'offre</a>
+            <app-whatsapp-button [offer]="offer"></app-whatsapp-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

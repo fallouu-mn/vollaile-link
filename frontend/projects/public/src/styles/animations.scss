@@ -1,0 +1,172 @@
+// =============================================================
+// VOLLAILE LINK — Mouvement
+//
+// Règle de direction : UN moment orchestré, pas des effets dispersés.
+//
+// Le moment est la séquence d'ouverture du hero. Elle est purement CSS
+// (délais d'animation), donc elle fonctionne aussi en rendu serveur et
+// ne coûte aucun JavaScript. Le reste du site ne bouge qu'au survol.
+//
+// Le meter, lui, a droit à son propre temps : ses segments se
+// remplissent dans l'ordre disponible → réservé → vendu, ce qui
+// rejoue la règle que le visiteur vient de lire.
+// =============================================================
+
+// ---------------- Séquence d'ouverture ----------------
+// Le délai est calibré pour que le titre se pose avant l'explication.
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ruleGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes meterFill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes dotPulse {
+  0%   { box-shadow: 0 0 0 0 var(--petrol-wash); }
+  70%  { box-shadow: 0 0 0 10px rgba(42,157,143,0); }
+  100% { box-shadow: 0 0 0 0 rgba(42,157,143,0); }
+}
+
+// Séquence du hero. L'ordre suit la lecture : on dit ce qu'on est,
+// puis on explique, puis on propose, puis on prouve.
+.hero__grid > * { opacity: 0; animation: riseIn .72s var(--ease-out-expo) both; }
+.hero__lead   { animation-delay: .04s; }
+.hero__demo   { animation-delay: .22s; }
+.hero__rule   { transform-origin: 0 50%; animation: ruleGrow .9s var(--ease-out-expo) .1s both; }
+
+.hero__lead > * { opacity: 0; animation: riseIn .6s var(--ease-out-expo) both; }
+.hero__lead .eyebrow      { animation-delay: .10s; }
+.hero__lead .hero__title  { animation-delay: .18s; }
+.hero__lead .hero__pitch  { animation-delay: .28s; }
+.hero__lead .hero__actions{ animation-delay: .38s; }
+.hero__lead .hero__proof  { animation-delay: .48s; }
+
+// Le pastille de l'en-tête respire une fois, puis se calme.
+.eyebrow__dot { animation: dotPulse 2.4s ease-out .8s 2; }
+
+// ---------------- Meter : le temps fort ----------------
+.lot__seg {
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  animation: meterFill .85s var(--ease-out-expo) both;
+}
+// L'ordre est la règle elle-même : libre, puis engagé, puis parti.
+.lot__seg--libre    { animation-delay: .55s; }
+.lot__seg--reserve  { animation-delay: .95s; }
+.lot__seg--vendu    { animation-delay: 1.25s; }
+.lot__seg--vide     { animation-delay: .55s; }
+
+.lot__legend,
+.lot__key {
+  opacity: 0;
+  animation: riseIn .5s var(--ease-out-expo) both;
+}
+.lot__key:nth-child(1) { animation-delay: 1.4s; }
+.lot__key:nth-child(2) { animation-delay: 1.55s; }
+.lot__key:nth-child(3) { animation-delay: 1.7s; }
+
+// ---------------- Révélation au défilement ----------------
+// Pilotée par IntersectionObserver (voir directive reveal).
+// Les éléments restent masqués seulement si JS tourne : sans lui,
+// le `no-js` de la directive les laisse visibles. Le contenu ne
+// doit jamais dépendre d'une animation pour exister.
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity .65s var(--ease-out-expo),
+    transform .65s var(--ease-out-expo);
+  will-change: opacity, transform;
+
+  &.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal--d1 { transition-delay: .08s; }
+.reveal--d2 { transition-delay: .16s; }
+.reveal--d3 { transition-delay: .24s; }
+.reveal--d4 { transition-delay: .32s; }
+
+// ---------------- Utilitaires existants ----------------
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.animate-fade-in    { animation: fadeIn   .5s ease both; }
+.animate-fade-in-up { animation: fadeInUp .6s var(--ease-out-expo) both; }
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 2.5px solid var(--bone-deep);
+  border-top-color: var(--saffron);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bone) 25%, var(--bone-deep) 50%, var(--bone) 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+  border-radius: var(--border-radius);
+}
+
+// =============================================================
+// Respect du réglage système « réduire les animations »
+// Ce n'est pas une option : une personne qui a demandé ce réglage
+// ne doit subir ni mouvement ni durée d'attente.
+// =============================================================
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  // Le meter garde son état final : c'est de l'information,
+  // pas de la décoration.
+  .lot__seg,
+  .lot__legend,
+  .lot__key,
+  .hero__grid > *,
+  .hero__lead > *,
+  .hero__rule {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,150 @@
+.container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.content {
+  margin-top: 20px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-form-field {
+  width: 250px;
+  margin-right: 16px;
+}
+
+.mat-table {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.mat-header-cell {
+  font-weight: 600;
+  color: #495057;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.mat-cell {
+  color: #212529;
+  font-size: 14px;
+  padding: 16px 8px;
+}
+
+.mat-row {
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.mat-row:hover {
+  background-color: #f8f9fa;
+}
+
+.mat-row:active {
+  background-color: #e9ecef;
+}
+
+.mat-paginator {
+  margin-top: 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.mat-icon-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.mat-icon-button:hover {
+  background-color: rgba(0,0,0,0.04);
+  transform: scale(1.1);
+}
+
+.mat-icon-button:active {
+  transform: scale(0.9);
+}
+
+.mat-icon-button[color="primary"] {
+  color: #1976d2;
+}
+
+.mat-icon-button[color="warning"] {
+  color: #ff9800;
+}
+
+.mat-icon-button[color="primary"]:hover {
+  background-color: rgba(25, 118, 210, 0.1);
+}
+
+.mat-icon-button[color="warning"]:hover {
+  background-color: rgba(255, 152, 0, 0.1);
+}
+
+// Responsive design
+@media (max-width: 1200px) {
+  mat-form-field {
+    width: 200px;
+  }
+}
+
+@media (max-width: 992px) {
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .mat-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .mat-toolbar span {
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .mat-table {
+    margin-top: 16px;
+  }
+
+  .mat-header-cell,
+  .mat-cell {
+    padding: 12px 6px;
+    font-size: 13px;
+  }
+
+  .mat-header-cell {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mat-header-cell,
+  .mat-cell {
+    padding: 10px 4px;
+  }
+
+  .mat-paginator {
+    margin-top: 8px;
+  }
+}

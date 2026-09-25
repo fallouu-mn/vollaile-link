@@ -1,0 +1,101 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Liste des clients</span>
+    <span class="spacer"></span>
+    <button mat-stroked-button (click)="exportCsv()" [disabled]="isExporting"
+            matTooltip="Exporter en CSV (l'export est journalisé)">
+      <mat-icon>download</mat-icon>
+      Exporter
+    </button>
+    <button mat-flat-button color="primary" routerLink="../create">
+      <mat-icon>person_add</mat-icon>
+      Nouveau client
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <!-- Filter Input -->
+    <mat-form-field appearance="fill" class="filter-form-field">
+      <mat-label>Filtrer les clients</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Filtrer par nom, téléphone, email, ville...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+      </ng-container>
+
+      <!-- Nom Column -->
+      <ng-container matColumnDef="nom">
+        <mat-header-cell *matHeaderCellDef sort> Nom </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.nom}}</mat-cell>
+      </ng-container>
+
+      <!-- Prenom Column -->
+      <ng-container matColumnDef="prenom">
+        <mat-header-cell *matHeaderCellDef sort> Prénom </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.prenom}}</mat-cell>
+      </ng-container>
+
+      <!-- Telephone Column -->
+      <ng-container matColumnDef="telephone">
+        <mat-header-cell *matHeaderCellDef sort> Téléphone </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.telephone}}</mat-cell>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef sort> Email </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
+      </ng-container>
+
+      <!-- Ville Column -->
+      <ng-container matColumnDef="ville">
+        <mat-header-cell *matHeaderCellDef sort> Ville </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.ville}}</mat-cell>
+      </ng-container>
+
+      <!-- Region Column -->
+      <ng-container matColumnDef="region">
+        <mat-header-cell *matHeaderCellDef sort> Région </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.region}}</mat-cell>
+      </ng-container>
+
+      <!-- Professionnel Column -->
+      <ng-container matColumnDef="professionnel">
+        <mat-header-cell *matHeaderCellDef> Professionnel </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.professionnel ? 'Oui' : 'Non'}}</mat-cell>
+      </ng-container>
+
+      <!-- isActive Column -->
+      <ng-container matColumnDef="isActive">
+        <mat-header-cell *matHeaderCellDef> Actif </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.isActive ? 'Oui' : 'Non'}}</mat-cell>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-icon-button color="warn" (click)="deleteClient(element.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" [routerLink]="'../edit/' + element.id">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

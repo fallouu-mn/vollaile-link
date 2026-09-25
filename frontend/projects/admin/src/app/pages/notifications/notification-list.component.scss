@@ -1,0 +1,149 @@
+.container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.content {
+  margin-top: 20px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  position: relative;
+}
+
+mat-toolbar button {
+  margin-left: 8px;
+}
+
+.mat-table {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.mat-header-cell {
+  font-weight: 600;
+  color: #495057;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.mat-cell {
+  color: #212529;
+  font-size: 14px;
+  padding: 16px 8px;
+}
+
+.mat-row {
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.mat-row:hover {
+  background-color: #f8f9fa;
+}
+
+.mat-row:active {
+  background-color: #e9ecef;
+}
+
+.mat-paginator {
+  margin-top: 16px;
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Responsive design
+@media (max-width: 1200px) {
+  mat-toolbar {
+    flex-wrap: wrap;
+  }
+
+  mat-toolbar div {
+    width: 100%;
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  mat-toolbar button {
+    margin: 4px 0;
+    width: auto;
+  }
+}
+
+@media (max-width: 992px) {
+  .mat-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .mat-table {
+    margin-top: 16px;
+  }
+
+  .mat-header-cell,
+  .mat-cell {
+    padding: 12px 6px;
+    font-size: 13px;
+  }
+
+  .mat-header-cell {
+    font-size: 12px;
+  }
+
+  .type-badge {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mat-header-cell,
+  .mat-cell {
+    padding: 10px 4px;
+  }
+
+  .mat-paginator {
+    margin-top: 8px;
+  }
+
+  .mat-cell button {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .mat-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mat-cell button,
+  .mat-cell mat-divider {
+    margin: 4px 0;
+  }
+}

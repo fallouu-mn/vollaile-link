@@ -1,0 +1,114 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Offres &amp; prix</span>
+    <span class="spacer"></span>
+    <button mat-icon-button (click)="loadOffres()" matTooltip="Actualiser" aria-label="Actualiser">
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <mat-form-field appearance="fill">
+      <mat-label>Rechercher</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Produit ou description...">
+    </mat-form-field>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <div class="info-banner">
+      <mat-icon>info</mat-icon>
+      <span>
+        Le stock est suivi par offre :
+        <strong>disponible = total − réservé − vendu</strong>.
+        Une réservation baisse le disponible sans consommer le lot ; elle devient
+        une vente à la livraison. Toute variation de prix est historisée et auditée.
+      </span>
+    </div>
+
+    <div class="error-banner" *ngIf="errorMessage">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage }}</span>
+      <button mat-button (click)="loadOffres()">Réessayer</button>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && !errorMessage && offres.length === 0">
+      <mat-icon>sell</mat-icon>
+      <p>Aucune offre enregistrée.</p>
+    </div>
+
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="offres.length > 0">
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+        <mat-cell *matCellDef="let element">#{{ element.offerId }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="offre">
+        <mat-header-cell *matHeaderCellDef> Offre </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <div class="offre-cell">
+            <span class="offre-produit">{{ element.productNom || 'Produit #' + element.productId }}</span>
+            <span class="offre-meta" *ngIf="element.description">{{ element.description }}</span>
+            <span class="offre-meta" *ngIf="element.activeReservationCount > 0">
+              {{ element.activeReservationCount }} réservation(s) active(s)
+            </span>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="prix">
+        <mat-header-cell *matHeaderCellDef> Prix unitaire </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ formatPrice(element.unitPrice) }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="stock">
+        <mat-header-cell *matHeaderCellDef> Total / Réservé / Vendu </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.quantityTotal }} / {{ element.quantityReserved }} / {{ element.quantitySold }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="disponible">
+        <mat-header-cell *matHeaderCellDef> Disponible </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="dispo-value" [class.zero]="element.quantityAvailable === 0">
+            {{ element.quantityAvailable }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="statut">
+        <mat-header-cell *matHeaderCellDef> Statut </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="statut-badge" [ngClass]="getStatutClass(element)">
+            {{ getStatutLabel(element.status) }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-icon-button (click)="editPrice(element)" matTooltip="Modifier le prix" aria-label="Modifier le prix">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button *ngIf="element.status === 'ACTIVE'"
+                  mat-icon-button (click)="changeStatus(element, 'WITHDRAWN')"
+                  matTooltip="Retirer l'offre" aria-label="Retirer l'offre">
+            <mat-icon>visibility_off</mat-icon>
+          </button>
+          <button *ngIf="element.status !== 'ACTIVE'"
+                  mat-icon-button (click)="changeStatus(element, 'ACTIVE')"
+                  matTooltip="Remettre en ligne" aria-label="Remettre en ligne">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons
+                   *ngIf="offres.length > 0"></mat-paginator>
+  </div>
+</div>

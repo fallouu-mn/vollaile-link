@@ -1,0 +1,93 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Liste des demandes</span>
+    <span class="spacer"></span>
+    <button mat-flat-button color="primary" routerLink="../create">
+      <mat-icon>assignment_add</mat-icon>
+      Nouvelle demande
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <!-- Filter Input -->
+    <mat-form-field appearance="fill" class="filter-form-field">
+      <mat-label>Filtrer les demandes</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Filtrer par client, produit, statut...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+      </ng-container>
+
+      <!-- Client Nom Column -->
+      <ng-container matColumnDef="clientNom">
+        <mat-header-cell *matHeaderCellDef sort> Client Nom </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getClientName(element.clientId)}}</mat-cell>
+      </ng-container>
+
+      <!-- Client Prenom Column -->
+      <ng-container matColumnDef="clientPrenom">
+        <mat-header-cell *matHeaderCellDef sort> Client Prénom </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getClientName(element.clientId)}}</mat-cell>
+      </ng-container>
+
+      <!-- Produit Nom Column -->
+      <ng-container matColumnDef="produitNom">
+        <mat-header-cell *matHeaderCellDef sort> Produit </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getProduitName(element.produitId || 0)}}</mat-cell>
+      </ng-container>
+
+      <!-- Quantite Souhaitee Column -->
+      <ng-container matColumnDef="quantiteSouhaitee">
+        <mat-header-cell *matHeaderCellDef sort> Quantité souhaitée </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.quantiteSouhaitee}}</mat-cell>
+      </ng-container>
+
+      <!-- Statut Column -->
+      <ng-container matColumnDef="statut">
+        <mat-header-cell *matHeaderCellDef sort> Statut </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <app-badge [text]="element.statut" [variant]="getStatutVariant(element.statut)"></app-badge>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Date Souhaitee Column -->
+      <ng-container matColumnDef="dateSouhaitee">
+        <mat-header-cell *matHeaderCellDef sort> Date souhaitée </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.dateSouhaitee | date:'short'}}</mat-cell>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="viewDetails(element.id!)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteDemande(element.id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <!-- Quick status change buttons -->
+          <button mat-icon-button color="primary" *ngIf="element.statut !== 'VALIDEE'" (click)="updateStatut(element, 'VALIDEE')">
+            <mat-icon>check_circle</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" *ngIf="element.statut !== 'REFUSEE'" (click)="updateStatut(element, 'REFUSEE')">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>{{isEditMode ? 'Modifier' : 'Nouvelle'}} zone de livraison</span>
+    <span class="spacer"></span>
+    <button mat-flat-button color="primary" routerLink="..">
+      <mat-icon>arrow_back</mat-icon>
+      Retour
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <div class="error-banner" *ngIf="errorMessage">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <form [formGroup]="zoneForm" (ngSubmit)="onSubmit()">
+      <mat-grid-list cols="2" rowHeight="1:1" gutterSize="20px">
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Nom de la zone *</mat-label>
+            <input matInput formControlName="nom" placeholder="Ex: Dakar Plateau, Almadies, etc.">
+            <mat-error *ngIf="f['nom'].hasError('required')">Le nom est requis</mat-error>
+            <mat-error *ngIf="f['nom'].hasError('maxlength')">100 caractères maximum</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Code *</mat-label>
+            <input matInput formControlName="code" placeholder="Ex: DAKAR">
+            <mat-hint>Identifiant court, converti en majuscules</mat-hint>
+            <mat-error *ngIf="f['code'].hasError('required')">Le code est requis</mat-error>
+            <mat-error *ngIf="f['code'].hasError('maxlength')">20 caractères maximum</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Frais de livraison (FCFA) *</mat-label>
+            <input matInput type="number" formControlName="fraisLivraison" placeholder="Ex: 0 pour Dakar">
+            <mat-hint>0 = livraison incluse</mat-hint>
+            <mat-error *ngIf="f['fraisLivraison'].hasError('required')">Les frais sont requis</mat-error>
+            <mat-error *ngIf="f['fraisLivraison'].hasError('min')">Les frais ne peuvent pas être négatifs</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Délai minimum (heures) *</mat-label>
+            <input matInput type="number" formControlName="delaiMinHeures" placeholder="Ex: 12">
+            <mat-error *ngIf="f['delaiMinHeures'].hasError('required')">Le délai minimum est requis</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Délai maximum (heures) *</mat-label>
+            <input matInput type="number" formControlName="delaiMaxHeures" placeholder="Ex: 24">
+            <mat-error *ngIf="f['delaiMaxHeures'].hasError('required')">Le délai maximum est requis</mat-error>
+            <mat-error *ngIf="hasDelaiError">Le délai maximum doit être supérieur ou égal au minimum</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="2" placeholder="Précisions sur la zone"></textarea>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="2">
+          <mat-form-field appearance="fill">
+            <mat-label>Zone active</mat-label>
+            <mat-slide-toggle formControlName="estActive"></mat-slide-toggle>
+            <mat-hint>Une zone inactive n'est plus proposée aux clients</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <div class="form-actions">
+        <button mat-flat-button color="primary" type="submit" [disabled]="isLoading">
+          {{isLoading ? 'Enregistrement...' : (isEditMode ? 'Mettre à jour' : 'Créer')}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

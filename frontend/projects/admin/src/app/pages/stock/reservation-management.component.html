@@ -1,0 +1,120 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Réservations de stock</span>
+    <span class="spacer"></span>
+    <button mat-stroked-button (click)="exportCsv()" [disabled]="isExporting"
+            matTooltip="Exporter les réservations (journalisé)">
+      <mat-icon>download</mat-icon>
+      Exporter
+    </button>
+    <button mat-stroked-button (click)="expireOverdue()" matTooltip="Libérer les réservations échues">
+      <mat-icon>autorenew</mat-icon>
+      Expirer les échues
+    </button>
+    <button mat-icon-button (click)="loadData()" matTooltip="Actualiser" aria-label="Actualiser">
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <mat-form-field appearance="fill">
+      <mat-label>Rechercher</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher dans la liste...">
+    </mat-form-field>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <div class="info-banner">
+      <mat-icon>info</mat-icon>
+      <span>
+        Une réservation bloque du stock <strong>sans le consommer</strong> :
+        le disponible baisse, le total reste inchangé.
+        Elle est convertie en vente à la livraison, ou libérée à l'annulation / à l'expiration.
+      </span>
+    </div>
+
+    <div class="error-banner" *ngIf="errorMessage">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage }}</span>
+      <button mat-button (click)="loadData()">Réessayer</button>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && !errorMessage && reservations.length === 0">
+      <mat-icon>inbox</mat-icon>
+      <p>Aucune réservation active.</p>
+    </div>
+
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="reservations.length > 0">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+      </ng-container>
+
+      <!-- Offre Column -->
+      <ng-container matColumnDef="offre">
+        <mat-header-cell *matHeaderCellDef> Offre </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getOffreLabel(element)}}</mat-cell>
+      </ng-container>
+
+      <!-- Produit Column -->
+      <ng-container matColumnDef="produitNom">
+        <mat-header-cell *matHeaderCellDef> Produit </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getProduitName(element)}}</mat-cell>
+      </ng-container>
+
+      <!-- Commande Column -->
+      <ng-container matColumnDef="commande">
+        <mat-header-cell *matHeaderCellDef> Commande </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getCommandeLabel(element)}}</mat-cell>
+      </ng-container>
+
+      <!-- Quantite Column -->
+      <ng-container matColumnDef="quantite">
+        <mat-header-cell *matHeaderCellDef> Quantité </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.quantite}}</mat-cell>
+      </ng-container>
+
+      <!-- Date Reservation Column -->
+      <ng-container matColumnDef="dateReservation">
+        <mat-header-cell *matHeaderCellDef> Réservée le </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getReservationDate(element)}}</mat-cell>
+      </ng-container>
+
+      <!-- Expiration Column : horodatage serveur -->
+      <ng-container matColumnDef="dateExpiration">
+        <mat-header-cell *matHeaderCellDef> Expire le </mat-header-cell>
+        <mat-cell *matCellDef="let element" [class.expired]="isExpired(element)">
+          {{getExpirationDate(element)}}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Statut Column -->
+      <ng-container matColumnDef="statut">
+        <mat-header-cell *matHeaderCellDef> Statut </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="status-badge" [style.backgroundColor]="getStatusColor(element.statut)">
+            {{getStatutLabel(element.statut)}}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-button color="warn" (click)="cancelReservation(element)"
+                  [disabled]="element.statut !== 'ACTIVE'">
+            Libérer
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons
+                   *ngIf="reservations.length > 0"></mat-paginator>
+  </div>
+</div>

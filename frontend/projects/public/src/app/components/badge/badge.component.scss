@@ -1,0 +1,55 @@
+.badge {
+  display: inline-block;
+  padding: 0.35em 0.65em;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.35rem;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+  // Subtle pulse animation for active status
+  &.badge-success {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4);
+    }
+  }
+
+  // Hover effect
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  }
+
+  // Active/focus state
+  &:active {
+    transform: translateY(0);
+  }
+
+  // Pill variant
+  &.badge-pill {
+    border-radius: 10rem;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.3em 0.5em;
+  }
+}

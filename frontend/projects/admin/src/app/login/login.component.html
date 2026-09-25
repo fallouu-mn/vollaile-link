@@ -1,0 +1,134 @@
+<div class="login-page">
+
+  <!-- Panneau gauche — visuel -->
+  <div class="login-visual" aria-hidden="true">
+    <div class="visual-logo">
+      <span class="logo-emoji">🐔</span>
+      <div class="logo-text">
+        <div class="logo-name">Vollaile Link</div>
+        <div class="logo-tagline">Back-office administrateur</div>
+      </div>
+    </div>
+
+    <h1 class="visual-headline">
+      Gérez votre<br>
+      plateforme<br>
+      <em>en toute fluidité</em>
+    </h1>
+
+    <p class="visual-desc">
+      Pilotez les commandes, les producteurs, les stocks
+      et les livraisons depuis un seul espace de travail.
+    </p>
+
+    <div class="visual-stats">
+      <div class="stat">
+        <div class="stat-val">100%</div>
+        <div class="stat-lbl">Sécurisé</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">Dakar</div>
+        <div class="stat-lbl">Zone principale</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">FCFA</div>
+        <div class="stat-lbl">Devise</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panneau droit — formulaire -->
+  <div class="login-form-panel">
+    <div class="login-form-wrap">
+
+      <!-- Logo mobile -->
+      <div class="mobile-logo">
+        <span>🐔</span>
+        <span>Vollaile Link</span>
+      </div>
+
+      <!-- Entête -->
+      <div class="form-heading">
+        <h1>Connexion</h1>
+        <p>Connectez-vous à votre espace administrateur</p>
+      </div>
+
+      <!-- Formulaire -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <!-- Téléphone -->
+        <div class="form-field">
+          <label for="phone">Numéro de téléphone</label>
+          <div class="input-wrap">
+            <span class="input-icon material-icons">phone</span>
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              placeholder="+221 77 000 00 00"
+              autocomplete="tel"
+              [class.error]="phone?.invalid && phone?.touched"
+              aria-required="true"
+              [attr.aria-invalid]="phone?.invalid && phone?.touched"
+            />
+          </div>
+          <div class="field-error" *ngIf="phone?.touched && phone?.hasError('required')">
+            Le numéro de téléphone est requis
+          </div>
+          <div class="field-error" *ngIf="phone?.touched && phone?.hasError('pattern')">
+            Format invalide. Utilisez le format international (+221...)
+          </div>
+        </div>
+
+        <!-- Mot de passe -->
+        <div class="form-field">
+          <label for="password">Mot de passe</label>
+          <div class="input-wrap">
+            <span class="input-icon material-icons">lock_outline</span>
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Votre mot de passe"
+              autocomplete="current-password"
+              [class.error]="password?.invalid && password?.touched"
+              aria-required="true"
+              [attr.aria-invalid]="password?.invalid && password?.touched"
+            />
+            <button
+              type="button"
+              class="eye-toggle"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
+              <span class="material-icons" style="font-size:20px">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
+          </div>
+          <div class="field-error" *ngIf="password?.touched && password?.hasError('required')">
+            Le mot de passe est requis
+          </div>
+        </div>
+
+        <!-- Erreur globale -->
+        <div class="form-error-global" *ngIf="error && !loading" role="alert">
+          <span class="material-icons" style="font-size:18px;flex-shrink:0">error_outline</span>
+          {{ error }}
+        </div>
+
+        <!-- Bouton submit -->
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="loginForm.invalid || loading"
+          [attr.aria-busy]="loading">
+          <div class="btn-spinner" *ngIf="loading"></div>
+          <span class="material-icons" *ngIf="!loading" style="font-size:20px">login</span>
+          {{ loading ? 'Connexion en cours…' : 'Se connecter' }}
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+</div>

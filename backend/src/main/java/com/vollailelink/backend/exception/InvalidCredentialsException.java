@@ -1,0 +1,7 @@
+package com.vollailelink.backend.exception;
+
+public class InvalidCredentialsException extends RuntimeException {
+    public InvalidCredentialsException(String message) {
+        super(message);
+    }
+}

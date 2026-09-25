@@ -1,0 +1,355 @@
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="container hero__grid">
+
+    <div class="hero__lead">
+      <p class="eyebrow">
+        <span class="eyebrow__dot" aria-hidden="true"></span>
+        Intermédiation · Dakar et région
+      </p>
+
+      <h1 class="hero__title">
+        Le marché de la volaille,
+        <span class="hero__title-em">sans le traverser.</span>
+      </h1>
+
+      <p class="hero__pitch">
+        Vollaile Link rassemble les disponibilités de plusieurs producteurs et
+        organise la commande, la livraison et les conditions. Vous voyez ce qui
+        est réellement disponible, chez un seul intermédiaire.
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn btn-primary btn-lg" routerLink="/demande-devis">
+          Demander un devis
+          <svg viewBox="0 0 20 20" aria-hidden="true" class="btn__arrow">
+            <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </a>
+        <a class="btn btn-outline btn-lg" routerLink="/disponibilites">
+          Voir les disponibilités
+        </a>
+      </div>
+
+      <ul class="hero__proof">
+        <li>
+          <span class="hero__proof-k">Anonymat</span>
+          <span class="hero__proof-v">Aucune coordonnées producteur exposée</span>
+        </li>
+        <li>
+          <span class="hero__proof-k">Traçabilité</span>
+          <span class="hero__proof-v">Chaque mouvement de stock est journalisé</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Le meter : démonstration de la règle, données d'exemple
+         explicitement étiquetées pour ne pas laisser croire à du live. -->
+    <aside class="hero__demo" aria-label="Exemple de lot">
+      <header class="demo__head">
+        <p class="demo__eyebrow">Lot #A-248 · poulet de chair</p>
+        <p class="demo__title">Ce que vous voyez réellement</p>
+      </header>
+
+      <app-lot-meter
+        [total]="200"
+        [disponible]="130"
+        [reserve]="45"
+        [vendu]="25"
+        label="Répartition du lot"
+        unit="200 pièces">
+      </app-lot-meter>
+
+      <p class="demo__rule">
+        <span>disponible</span>
+        <b>=</b>
+        <span>total</span>
+        <b>−</b>
+        <span>réservé</span>
+        <b>−</b>
+        <span>vendu</span>
+        <b class="demo__rule-eq">=</b>
+        <strong>130</strong>
+      </p>
+
+      <p class="demo__note">
+        Un lot de 200 pièces n'en propose que 130 : 45 sont déjà réservées
+        par d'autres acheteurs, 25 ont été livrées. Sans cela, vous commanderiez
+        sur une quantité qui n'existe plus.
+      </p>
+
+      <p class="demo__disclaimer">Exemple pédagogique, non issu d'un lot en cours.</p>
+    </aside>
+
+  </div>
+
+  <div class="hero__rule" aria-hidden="true"></div>
+</section>
+
+<!-- ================= CHIFFRES ================= -->
+<section class="tape" aria-label="Vollaile Link en bref">
+  <div class="container tape__inner" appReveal>
+    <div class="tape__item">
+      <b>1 seule demande</b>
+      <span>vous suffit pour être rappelé</span>
+    </div>
+    <div class="tape__sep" aria-hidden="true"></div>
+    <div class="tape__item">
+      <b>0 coordonnées exposées</b>
+      <span>les producteurs restent anonymes</span>
+    </div>
+    <div class="tape__sep" aria-hidden="true"></div>
+    <div class="tape__item">
+      <b>total − réservé − vendu</b>
+      <span>le stock affiché est le stock réel</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROCESSUS ================= -->
+<!-- Le parcours est réellement séquentiel, donc le rail est honnête :
+     il montre une progression, il ne décore pas. -->
+<section class="section rail-section">
+  <div class="container">
+    <header class="sec-head">
+      <p class="sec-head__eyebrow">Le parcours</p>
+      <h2 class="sec-head__title">Trois étapes, pas plus.</h2>
+      <p class="sec-head__lead">
+        Vous ne négociez pas avec plusieurs producteurs. Vous décrivez votre
+        besoin, nous revenons vers vous avec des conditions concrètes.
+      </p>
+    </header>
+
+    <ol class="rail">
+      <li class="rail__step" appReveal>
+        <span class="rail__marker" aria-hidden="true"></span>
+        <h3>Parcourez</h3>
+        <p>
+          Les lots publiés sont ceux que nos équipes ont vérifiés. Prix et
+          quantité apparaissent en clair, en francs CFA.
+        </p>
+        <a routerLink="/disponibilites" class="rail__link">
+          Voir les lots
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </a>
+      </li>
+
+      <li class="rail__step" appReveal>
+        <span class="rail__marker" aria-hidden="true"></span>
+        <h3>Transmettez</h3>
+        <p>
+          Quantité, zone et date voulues. Vous décrivez, nous vérifions la
+          disponibilité réelle et les frais de livraison.
+        </p>
+        <a routerLink="/demande-devis" class="rail__link">
+          Envoyer ma demande
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </a>
+      </li>
+
+      <li class="rail__step" appReveal>
+        <span class="rail__marker" aria-hidden="true"></span>
+        <h3>Confirmez</h3>
+        <p>
+          Nous revenons vers vous avec prix, délai et zone. Le stock est
+          réservé à la confirmation, pas avant.
+        </p>
+        <a routerLink="/comment-ca-marche" class="rail__link">
+          Détail du processus
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </a>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= INTERMÉDIATION ================= -->
+<section class="section section--ink">
+  <div class="container why">
+    <div class="why__lead" appReveal>
+      <p class="sec-head__eyebrow sec-head__eyebrow--flip">Pourquoi passer par nous</p>
+      <h2 class="why__title">
+        Vous n'êtes pas censé<br>connaitre le marché entier.
+      </h2>
+      <p class="why__pitch">
+        Trouver un fournisseur de volaille à Dakar, c'est passer par un marché
+        physique, négocier au poids, avancer le cash et gérer la logistique.
+        C'est faisable une fois. Pas chaque semaine.
+      </p>
+      <a class="btn btn-white" routerLink="/a-propos">Notre rôle</a>
+    </div>
+
+    <ul class="why__list" appReveal>
+      <li>
+        <h3>Les producteurs restent anonymes</h3>
+        <p>
+          Ni nom, ni adresse, ni marge. Vous negotiatez avec Vollaile Link,
+          pas avec quelqu'un qui a de la chance ce matin.
+        </p>
+      </li>
+      <li>
+        <h3>Un stock qui tient la route</h3>
+        <p>
+          Une réservation bloque réellement des unités. Deux acheteurs ne
+          peuvent pas obtenir le même lot : c'est vérifié en base, pas estimé.
+        </p>
+      </li>
+      <li>
+        <h3>Une trace, en cas de litige</h3>
+        <p>
+          Chaque entrée, réservation et changement de statut est journalisé
+          avec l'heure et l'auteur. Vous savez ce qui s'est passé.
+        </p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= LOT EN COURS ================= -->
+<section class="section" id="lots">
+  <div class="container">
+    <header class="sec-head sec-head--row">
+      <div>
+        <p class="sec-head__eyebrow">Disponibilités</p>
+        <h2 class="sec-head__title">Ce qui part en ce moment.</h2>
+      </div>
+      <a class="sec-head__action" routerLink="/disponibilites">
+        Tous les lots
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.7"
+                stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </a>
+    </header>
+
+    @if (isLoadingOffers) {
+      <div class="lots__state">
+        <span class="spinner" aria-hidden="true"></span>
+        <p>Chargement des lots…</p>
+      </div>
+    } @else if (offersError) {
+      <div class="alert alert-error lots__state">
+        <p>Les disponibilités n'ont pas pu être chargées.</p>
+        <a routerLink="/demande-devis">Envoyez directement votre demande</a>
+      </div>
+    } @else if (offers.length === 0) {
+      <div class="lots__state lots__state--empty">
+        <p class="lots__empty-title">Aucun lot publié pour l'instant.</p>
+        <p>
+          Les disponibilités sont vérifiées avant publication. Envoyez votre
+          besoin, nous vous répondons avec ce qui est réellement disponible.
+        </p>
+        <a class="btn btn-primary" routerLink="/demande-devis">Décrire mon besoin</a>
+      </div>
+    } @else {
+      <ul class="lots">
+        @for (offer of offers; track offer.id) {
+          <li class="lot-card" appReveal>
+            <div class="lot-card__head">
+              <h3>{{ offer.productName }}</h3>
+              @if (offer.unitType) {
+                <span class="lot-card__unit">au {{ offer.unitType }}</span>
+              }
+            </div>
+
+            @if (offer.productDescription) {
+              <p class="lot-card__desc">{{ offer.productDescription }}</p>
+            }
+
+            <p class="lot-card__price">
+              {{ offer.unitPrice | number:'1.0-0' }}
+              <span>FCFA / {{ offer.unitType || 'unité' }}</span>
+            </p>
+
+            <div class="lot-card__meter">
+              <app-lot-meter
+                [total]="offer.quantityAvailable"
+                [disponible]="offer.quantityAvailable"
+                [compact]="true">
+              </app-lot-meter>
+              <p class="lot-card__avail">
+                <b>{{ offer.quantityAvailable }}</b> {{ offer.unitType || 'unité(s)' }} disponibles
+              </p>
+            </div>
+
+            <a class="lot-card__link" [routerLink]="['/offre', offer.id]">
+              Détail du lot
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.7"
+                      stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</section>
+
+<!-- ================= ZONES ================= -->
+<section class="section section--bone">
+  <div class="container zones">
+    <header class="sec-head">
+      <p class="sec-head__eyebrow">Livraison</p>
+      <h2 class="sec-head__title">Dakar et sa région, pour commencer.</h2>
+      <p class="sec-head__lead">
+        Les zones desservies et leurs frais sont confirmés avec votre devis.
+        Nous ne livrons pas partout : nous annonçons ce que nous tenons.
+      </p>
+    </header>
+
+    <ul class="zones__list" appReveal>
+      <li>
+        <h3>Dakar intra-muros</h3>
+        <p>Dakar Plateau, Almadies, Parcelles</p>
+        <span class="zones__frais">Livraison incluse</span>
+      </li>
+      <li>
+        <h3>Banlieue</h3>
+        <p>Pikine, Guédiawaye, Rufisque</p>
+        <span class="zones__frais">2 000 FCFA</span>
+      </li>
+      <li>
+        <h3>Thiès</h3>
+        <p>Ville et environs</p>
+        <span class="zones__frais">3 500 FCFA</span>
+      </li>
+    </ul>
+
+    <a class="zones__link" routerLink="/zones-desservees">
+      Voir toutes les conditions
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.7"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- ================= APPEL FINAL ================= -->
+<section class="closer">
+  <div class="container closer__inner" appReveal>
+    <h2 class="closer__title">
+      Dites-nous ce qu'il vous faut.<br>
+      Nous revenons avec ce que nous avons.
+    </h2>
+    <p class="closer__lead">
+      Une demande ne vous engage à rien. Elle nous permet de vérifier
+      une disponibilité réelle avant que vous ne commandiez.
+    </p>
+    <div class="closer__actions">
+      <a class="btn btn-primary btn-lg" routerLink="/demande-devis">Demander un devis</a>
+      <a class="btn btn-ghost btn-lg" routerLink="/contact">Poser une question</a>
+    </div>
+  </div>
+</section>

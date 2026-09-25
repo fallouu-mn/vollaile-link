@@ -1,0 +1,222 @@
+<div class="page-content dashboard">
+
+  <!-- En-tête -->
+  <div class="dash-header">
+    <p class="dash-greeting">Bienvenue de retour 👋</p>
+    <h1 class="dash-title">Tableau de bord</h1>
+    <p class="dash-subtitle">Vue d'ensemble de votre activité — Dakar et région</p>
+  </div>
+
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+  <div class="error-banner" *ngIf="errorMessage">
+    <span class="material-icons">error</span>
+    <span>{{ errorMessage }}</span>
+    <button mat-button (click)="loadDashboard()">Réessayer</button>
+  </div>
+
+  <ng-container *ngIf="!isLoading && !errorMessage">
+
+    <!-- Règle métier du stock : disponible = total - réservé - vendu -->
+    <section class="stock-rule">
+      <span class="material-icons">info</span>
+      <span>
+        Stock disponible <strong>{{ stock.disponible }}</strong>
+        = total {{ stock.total }} − réservé {{ stock.reserve }} − vendu {{ stock.vendu }}
+        <span class="stock-rule-hint">(unités, toutes offres actives)</span>
+      </span>
+    </section>
+
+    <!-- Statistiques clés -->
+    <section class="stats-section">
+      <div class="stats-grid stagger-children">
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap green">
+            <span class="material-icons">people</span>
+          </div>
+          <span class="stat-label">Clients actifs</span>
+          <span class="stat-value">{{ clientsActifs.valeur }}</span>
+          <span class="stat-trend" [class.up]="(clientsActifs.evolution ?? 0) > 0"
+                [style.color]="(clientsActifs.evolution ?? 0) > 0 ? '' : 'var(--text-muted)'">
+            <span class="material-icons" style="font-size:14px">
+              {{ (clientsActifs.evolution ?? 0) > 0 ? 'trending_up' : 'remove' }}
+            </span>
+            {{ clientsActifs.evolution ?? 0 }} {{ clientsActifs.libelleEvolution }}
+          </span>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap amber">
+            <span class="material-icons">assignment</span>
+          </div>
+          <span class="stat-label">Demandes en cours</span>
+          <span class="stat-value">{{ demandesEnCours.valeur }}</span>
+          <span class="stat-trend" [class.up]="(demandesEnCours.evolution ?? 0) > 0"
+                [style.color]="(demandesEnCours.evolution ?? 0) > 0 ? '' : 'var(--text-muted)'">
+            <span class="material-icons" style="font-size:14px">
+              {{ (demandesEnCours.evolution ?? 0) > 0 ? 'trending_up' : 'remove' }}
+            </span>
+            {{ demandesEnCours.evolution ?? 0 }} {{ demandesEnCours.libelleEvolution }}
+          </span>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap blue">
+            <span class="material-icons">inventory_2</span>
+          </div>
+          <span class="stat-label">Stock disponible</span>
+          <span class="stat-value">{{ stockDisponible.valeur }}</span>
+          <span class="stat-trend" style="color: var(--text-muted)">
+            <span class="material-icons" style="font-size:14px">remove</span>
+            {{ reservationsActives.valeur }} réservation(s) en cours
+          </span>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap purple">
+            <span class="material-icons">agriculture</span>
+          </div>
+          <span class="stat-label">Producteurs</span>
+          <span class="stat-value">{{ producteursActifs.valeur }}</span>
+          <span class="stat-trend" style="color: var(--text-muted)">
+            <span class="material-icons" style="font-size:14px">remove</span>
+            {{ offresActives.valeur }} offre(s) active(s)
+          </span>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap teal">
+            <span class="material-icons">shopping_cart</span>
+          </div>
+          <span class="stat-label">Commandes à traiter</span>
+          <span class="stat-value">{{ commandesEnAttente.valeur }}</span>
+          <span class="stat-trend" style="color: var(--text-muted)">
+            <span class="material-icons" style="font-size:14px">remove</span>
+            en attente de paiement
+          </span>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap amber">
+            <span class="material-icons">notifications</span>
+          </div>
+          <span class="stat-label">Notifications non lues</span>
+          <span class="stat-value">{{ notificationsNonLues.valeur }}</span>
+          <span class="stat-trend" style="color: var(--text-muted)">
+            <span class="material-icons" style="font-size:14px">remove</span>
+            à traiter
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Accès rapides -->
+    <section class="quick-access">
+      <h2>Accès rapides</h2>
+      <div class="nav-grid stagger-children">
+
+        <a class="nav-card" routerLink="/demandes">
+          <div class="nav-card-icon">
+            <span class="material-icons">assignment</span>
+          </div>
+          <div class="nav-card-title">Demandes</div>
+          <div class="nav-card-desc">Traiter les nouvelles demandes et devis clients</div>
+          <span class="nav-card-arrow material-icons">arrow_forward</span>
+        </a>
+
+        <a class="nav-card" routerLink="/commandes">
+          <div class="nav-card-icon">
+            <span class="material-icons">shopping_cart</span>
+          </div>
+          <div class="nav-card-title">Commandes</div>
+          <div class="nav-card-desc">Suivre les commandes en cours et les livraisons</div>
+          <span class="nav-card-arrow material-icons">arrow_forward</span>
+        </a>
+
+        <a class="nav-card" routerLink="/offres">
+          <div class="nav-card-icon">
+            <span class="material-icons">sell</span>
+          </div>
+          <div class="nav-card-title">Offres &amp; prix</div>
+          <div class="nav-card-desc">Ajuster les prix et le statut des offres</div>
+          <span class="nav-card-arrow material-icons">arrow_forward</span>
+        </a>
+
+        <a class="nav-card" routerLink="/stock">
+          <div class="nav-card-icon">
+            <span class="material-icons">inventory_2</span>
+          </div>
+          <div class="nav-card-title">Stock</div>
+          <div class="nav-card-desc">Mouvements, réservations et état par offre</div>
+          <span class="nav-card-arrow material-icons">arrow_forward</span>
+        </a>
+
+        <a class="nav-card" routerLink="/audit">
+          <div class="nav-card-icon">
+            <span class="material-icons">history</span>
+          </div>
+          <div class="nav-card-title">Journal d'audit</div>
+          <div class="nav-card-desc">Tracer les mouvements, prix et changements de statut</div>
+          <span class="nav-card-arrow material-icons">arrow_forward</span>
+        </a>
+
+        <a class="nav-card" routerLink="/zones-livraison">
+          <div class="nav-card-icon">
+            <span class="material-icons">local_shipping</span>
+          </div>
+          <div class="nav-card-title">Livraisons</div>
+          <div class="nav-card-desc">Gérer les zones desservies et les frais</div>
+          <span class="nav-card-arrow material-icons">arrow_forward</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Activité récente + info -->
+    <div class="bottom-grid">
+
+      <!-- Activité réelle : alimentée par la piste d'audit -->
+      <div class="activity-card">
+        <div class="card-head">
+          <h3>Activité récente</h3>
+          <a routerLink="/audit">Voir le journal →</a>
+        </div>
+        <div class="activity-list stagger-children" *ngIf="recentActivities.length > 0">
+          <div class="activity-item" *ngFor="let activity of recentActivities">
+            <div class="activity-icon" [ngClass]="activity.couleur">
+              <span class="material-icons">{{ activity.icone }}</span>
+            </div>
+            <div class="activity-content">
+              <div class="activity-text">{{ activity.texte }}</div>
+              <div class="activity-time">{{ formatRelativeDate(activity.horodatage) }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="empty-state" *ngIf="recentActivities.length === 0">
+          <span class="material-icons">history</span>
+          <p>Aucune activité enregistrée pour le moment.</p>
+        </div>
+      </div>
+
+      <!-- Info / aide -->
+      <div class="info-card">
+        <div class="info-icon">📦</div>
+        <h3>Approvisionnement Dakar</h3>
+        <p>
+          Le stock est suivi par offre : <strong>disponible = total − réservé − vendu</strong>.
+          Une réservation baisse le disponible sans consommer le lot ; elle devient
+          une vente à la livraison.
+        </p>
+        <a routerLink="/stock">
+          <span class="material-icons" style="font-size:18px">inventory</span>
+          Voir le stock
+        </a>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</div>

@@ -1,0 +1,30 @@
+<div class="confirmation-page">
+  <header class="page-header">
+    <h1>Demande envoyée</h1>
+  </header>
+
+  <section class="confirmation-content">
+    <div class="container">
+      <div class="confirmation-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h2>Votre demande a bien été reçue</h2>
+      @if (reference) {
+        <p class="reference">Référence : <strong>{{ reference }}</strong></p>
+      }
+      <p>Vollaile Link vérifie la disponibilité et les conditions, puis vous recontacte rapidement.</p>
+
+      <div class="next-steps">
+        <h3>Que se passe-t-il maintenant ?</h3>
+        <ol>
+          <li>Notre équipe examine votre demande</li>
+          <li>Nous vérifions le stock et la zone de livraison</li>
+          <li>Nous vous transmettons les conditions et le devis</li>
+          <li>Vous confirmez la commande avec Vollaile Link</li>
+        </ol>
+      </div>
+
+      <a href="/disponibilites" class="btn btn-primary btn-lg">Voir les disponibilités</a>
+    </div>
+  </section>
+</div>

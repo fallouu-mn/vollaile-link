@@ -1,0 +1,7 @@
+<button *ngIf="hasWhatsAppNumber; else requestFallback" type="button" class="btn btn-whatsapp" (click)="openWhatsApp()">
+  <i *ngIf="showIcon" class="fab fa-whatsapp"></i>
+  <span class="button-label">{{ buttonLabel }}</span>
+</button>
+<ng-template #requestFallback>
+  <a class="btn btn-primary" [href]="requestUrl">Envoyer ma demande</a>
+</ng-template>

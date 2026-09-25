@@ -1,0 +1,16 @@
+{
+  "//": [
+    "Proxy de développement vers le backend Spring Boot (port 8083).",
+    "IMPORTANT : le dev-server Angular est basé sur Vite, dont le proxy",
+    "fonctionne par PREFIXE de chemin, pas par glob.",
+    "La clé doit donc être '/api' et non '/api/*' : avec '/api/*',",
+    "Vite chercherait un chemin littéral commençant par '/api/*' et ne",
+    "transmettrait jamais la requête au backend."
+  ],
+  "/api": {
+    "target": "http://localhost:8083",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
+  }
+}

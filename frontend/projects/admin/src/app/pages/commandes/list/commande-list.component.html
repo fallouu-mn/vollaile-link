@@ -1,0 +1,91 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Liste des commandes</span>
+    <span class="spacer"></span>
+    <button mat-stroked-button (click)="exportCsv()" [disabled]="isExporting"
+            matTooltip="Exporter en CSV (journalisé)">
+      <mat-icon>download</mat-icon>
+      Exporter
+    </button>
+    <mat-form-field appearance="fill">
+      <mat-label>Rechercher</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher dans la liste...">
+    </mat-form-field>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+      </ng-container>
+
+      <!-- Client Nom Column -->
+      <ng-container matColumnDef="clientNom">
+        <mat-header-cell *matHeaderCellDef> Client </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getClientName(element.clientId)}}</mat-cell>
+      </ng-container>
+
+      <!-- Produit Nom Column -->
+      <ng-container matColumnDef="produitNom">
+        <mat-header-cell *matHeaderCellDef> Produit </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{getProduitName(element.produitId)}}</mat-cell>
+      </ng-container>
+
+      <!-- Quantite Column -->
+      <ng-container matColumnDef="quantite">
+        <mat-header-cell *matHeaderCellDef> Quantité </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.quantite}}</mat-cell>
+      </ng-container>
+
+      <!-- Prix Unitaire Column -->
+      <ng-container matColumnDef="prixUnitaire">
+        <mat-header-cell *matHeaderCellDef> Prix unitaire </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.prixUnitaire}}</mat-cell>
+      </ng-container>
+
+      <!-- Statut Column -->
+      <ng-container matColumnDef="statut">
+        <mat-header-cell *matHeaderCellDef> Statut </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <app-badge [text]="element.statut" [variant]="getStatutVariant(element.statut)"></app-badge>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Date Livraison Prev Column -->
+      <ng-container matColumnDef="dateLivraisonPrev">
+        <mat-header-cell *matHeaderCellDef> Date de livraison prévue </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.dateLivraisonPrev | date:'short'}}</mat-cell>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="viewDetails(element.id!)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteCommande(element.id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <!-- Quick status change buttons -->
+          <button mat-icon-button color="primary" *ngIf="element.statut !== 'PAYEE'" (click)="updateStatut(element, 'PAYEE')">
+            <mat-icon>check_circle</mat-icon>
+          </button>
+          <button mat-icon-button color="warning" *ngIf="element.statut !== 'ANNULEE'" (click)="updateStatut(element, 'ANNULEE')">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

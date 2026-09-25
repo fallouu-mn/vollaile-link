@@ -1,0 +1,69 @@
+# =============================================================
+# VOLLAILE LINK — exclusions de versionnement
+# =============================================================
+
+### Sécurité — NE JAMAIS committer
+# Identifiants base de données, JWT, téléphone admin.
+# .env.example (gabarit sans secret réel) reste versionné.
+.env
+.env.*
+!.env.example
+
+### Outils embarqués (non versionnés : on installe depuis le dépôt officiel)
+apache-maven-*/
+backend/apache-maven-*/
+*.zip
+*.jar
+*.war
+
+### Maven / compilation
+target/
+*.class
+
+### Sauvegardes locales
+*.backup
+*.bak
+*.orig
+*.tmp
+
+### Eclipse
+.project
+.classpath
+.settings/
+
+### IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+### VS Code (partagé : voir la note dans le dépôt)
+.vscode/
+
+### Spring / logs
+*.log
+logs/
+
+### Fichiers générés
+/dist
+/build
+/out
+
+### Node
+node_modules/
+npm-debug.log
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+### Angular
+.angular/
+.angular/cache
+
+### Agent local
+.claude/
+
+### OS
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,147 @@
+<a class="skip-link" href="#main">Aller au contenu</a>
+
+<!-- ================= EN-TÊTE ================= -->
+<header class="nav" [class.nav--stuck]="stuck()">
+  <div class="nav__inner">
+    <a class="brand" routerLink="/" (click)="closeMenu()" aria-label="Vollaile Link, accueil">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M4 20c0-7.18 5.82-13 13-13h11v11c0 7.18-5.82 13-13 13H4V20Z"
+                fill="currentColor" opacity=".18"/>
+          <path d="M4 20c0-7.18 5.82-13 13-13h11v11c0 7.18-5.82 13-13 13H4V20Z"
+                stroke="currentColor" stroke-width="1.6"/>
+          <path d="M11 20.5h9M15.5 16v9"
+                stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="brand__text">
+        <span class="brand__name">Vollaile&nbsp;Link</span>
+        <span class="brand__tag">Approvisionnement · Sénégal</span>
+      </span>
+    </a>
+
+    <nav class="nav__links" aria-label="Navigation principale">
+      <a routerLink="/disponibilites" routerLinkActive="is-active" (click)="closeMenu()">Disponibilités</a>
+      <a routerLink="/comment-ca-marche" routerLinkActive="is-active" (click)="closeMenu()">Comment ça marche</a>
+      <a routerLink="/zones-desservees" routerLinkActive="is-active" (click)="closeMenu()">Zones</a>
+      <a routerLink="/faq" routerLinkActive="is-active" (click)="closeMenu()">FAQ</a>
+      <a routerLink="/a-propos" routerLinkActive="is-active" (click)="closeMenu()">À propos</a>
+    </nav>
+
+    <div class="nav__actions">
+      <a class="nav__cta" routerLink="/demande-devis" (click)="closeMenu()">
+        Demander un devis
+      </a>
+      <button
+        class="nav__burger"
+        type="button"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="menu-mobile"
+        aria-label="Ouvrir le menu">
+        <span [class.is-open]="menuOpen()"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Progression de lecture : donne du poids à la page longue -->
+  <div class="nav__progress" [style.transform]="'scaleX(' + progress() + ')'" aria-hidden="true"></div>
+</header>
+
+<!-- ================= MENU MOBILE ================= -->
+<div class="sheet" id="menu-mobile" [class.sheet--open]="menuOpen()">
+  <nav class="sheet__links" aria-label="Navigation mobile">
+    <a routerLink="/disponibilites" routerLinkActive="is-active" (click)="closeMenu()">
+      <span>Disponibilités</span>
+      <svg class="sheet__arrow" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </a>
+    <a routerLink="/comment-ca-marche" routerLinkActive="is-active" (click)="closeMenu()">
+      <span>Comment ça marche</span>
+      <svg class="sheet__arrow" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </a>
+    <a routerLink="/zones-desservees" routerLinkActive="is-active" (click)="closeMenu()">
+      <span>Zones desservies</span>
+      <svg class="sheet__arrow" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </a>
+    <a routerLink="/faq" routerLinkActive="is-active" (click)="closeMenu()">
+      <span>Questions fréquentes</span>
+      <svg class="sheet__arrow" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </a>
+    <a routerLink="/a-propos" routerLinkActive="is-active" (click)="closeMenu()">
+      <span>À propos</span>
+      <svg class="sheet__arrow" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </a>
+    <a routerLink="/contact" routerLinkActive="is-active" (click)="closeMenu()">
+      <span>Contact</span>
+      <svg class="sheet__arrow" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </a>
+  </nav>
+  <a class="sheet__cta" routerLink="/demande-devis" (click)="closeMenu()">Demander un devis</a>
+</div>
+@if (menuOpen()) {
+  <div class="scrim scrim--on" (click)="closeMenu()"></div>
+}
+
+<!-- ================= CONTENU ================= -->
+<main id="main">
+  <router-outlet />
+</main>
+
+<!-- ================= PIED DE PAGE ================= -->
+<footer class="foot">
+  <div class="container foot__inner">
+    <div class="foot__brand">
+      <span class="foot__mark" aria-hidden="true">VL</span>
+      <p class="foot__pitch">
+        Vollaile Link centralise les disponibilités de producteurs de volailles
+        et organise la mise en relation. Les producteurs restent anonymes.
+      </p>
+    </div>
+
+    <nav class="foot__col" aria-label="Découvrir">
+      <h2>Découvrir</h2>
+      <a routerLink="/disponibilites">Disponibilités</a>
+      <a routerLink="/comment-ca-marche">Comment ça marche</a>
+      <a routerLink="/zones-desservees">Zones desservies</a>
+    </nav>
+
+    <nav class="foot__col" aria-label="Aide">
+      <h2>Aide</h2>
+      <a routerLink="/faq">Questions fréquentes</a>
+      <a routerLink="/a-propos">À propos</a>
+      <a routerLink="/contact">Contact</a>
+    </nav>
+
+    <div class="foot__col">
+      <h2>Zone de lancement</h2>
+      <p class="foot__zone">Dakar et sa région</p>
+      <a class="foot__cta" routerLink="/demande-devis">Demander un devis</a>
+    </div>
+  </div>
+
+  <div class="container foot__base">
+    <p>© {{ year }} Vollaile Link. Intermédiation commerciale — Sénégal.</p>
+    <p class="foot__legal">
+      Vollaile Link n'est pas un producteur. Les offres sont vérifiées par notre
+      équipe avant publication.
+    </p>
+  </div>
+</footer>

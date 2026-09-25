@@ -1,0 +1,23 @@
+<div class="page-wrapper">
+  <header class="page-header">
+    <h1>{{ pageData?.title }}</h1>
+  </header>
+
+  <!-- Error message -->
+  <div class="alert alert-error" *ngIf="errorMessage && !isLoading">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Loading indicator -->
+  <div class="loading-indicator" *ngIf="isLoading && !pageData">
+    <div class="spinner"></div>
+    <p>Chargement de la page...</p>
+  </div>
+
+  <!-- Page content -->
+  <section class="page-content" *ngIf="pageData && !isLoading">
+    <div class="container">
+      <div [innerHTML]="pageData.content"></div>
+    </div>
+  </section>
+</div>

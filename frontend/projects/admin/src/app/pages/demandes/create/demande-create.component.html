@@ -1,0 +1,122 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Créer une nouvelle demande</span>
+    <span class="spacer"></span>
+    <button mat-button color="primary" routerLink="../">
+      <mat-icon>arrow_back</mat-icon>
+      Retour à la liste
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <form [formGroup]="demandeForm" (ngSubmit)="onSubmit()" class="form">
+      <mat-grid-list cols="2" rowHeight="1:1" gutterSize="10px">
+
+        <!-- Client Selection -->
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Client *</mat-label>
+            <mat-select formControlName="clientId" required>
+              <mat-option *ngFor="let client of clients" [value]="client.id">
+                {{ client.prenom }} {{ client.nom }} ({{ client.telephone }})
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f['clientId'].hasError('required')">
+              Le client est requis
+            </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- Product Selection -->
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Produit</mat-label>
+            <mat-select formControlName="produitId">
+              <mat-option value="">-- Sélectionner un produit --</mat-option>
+              <mat-option *ngFor="let produit of produits" [value]="produit.id">
+                {{ produit.name }} — {{ produit.stock?.available ?? 0 }} {{ produit.unitType || 'unité(s)' }} disponible(s)
+              </mat-option>
+            </mat-select>
+            <mat-hint>Laisser vide pour spécifier un nom de produit personnalisé</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- Quantity -->
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Quantité souhaitée</mat-label>
+            <input matInput type="number" formControlName="quantiteSouhaitee" min="1">
+            <mat-hint>Laisser vide si non spécifié</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- Desired Unit Price -->
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Prix unitaire souhaité (FCFA)</mat-label>
+            <input matInput type="number" formControlName="prixUnitaireSouhaite" min="0">
+            <mat-hint>Laisser vide si non spécifié</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- Custom Product Name -->
+        <mat-grid-tile colspan="2">
+          <mat-form-field appearance="fill">
+            <mat-label>Nom du produit (si personnalisé)</mat-label>
+            <input matInput type="text" formControlName="nomProduit">
+            <mat-hint>À remplir si vous n'avez pas sélectionné un produit ci-dessus</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- Description -->
+        <mat-grid-tile colspan="2">
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- Desired Date -->
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Date souhaitée de livraison</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dateSouhaitee">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-hint>Laisser vide si non spécifié</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <!-- Delivery Location -->
+        <mat-grid-tile colspan="2">
+          <mat-form-field appearance="fill">
+            <mat-label>Lieu de livraison</mat-label>
+            <input matInput type="text" formControlName="lieuLivraison">
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+      <div class="form-actions">
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="isLoading || demandeForm.invalid"
+        >
+          <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
+          <span *ngIf="!isLoading">Créer la demande</span>
+        </button>
+        <button
+          mat-button
+          type="button"
+          routerLink="../"
+        >
+          Annuler
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

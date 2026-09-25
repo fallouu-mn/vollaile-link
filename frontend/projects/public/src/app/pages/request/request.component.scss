@@ -1,0 +1,149 @@
+.request-page {
+  // Page header
+  .page-header {
+    text-align: center;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 2rem;
+    }
+  }
+
+  // Alert styles
+  .alert {
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+
+    &.alert-error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    &.alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+  }
+
+  // Form styles
+  .request-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+
+    .form-group {
+      margin-bottom: 1.5rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        &:focus {
+          outline: none;
+          border-color: #3498db;
+          box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+        }
+
+        &.is-invalid {
+          border-color: #dc3545;
+
+          &:focus {
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
+          }
+        }
+      }
+
+      .invalid-feedback {
+        display: block;
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: #dc3545;
+      }
+    }
+
+    .form-actions {
+      text-align: center;
+      margin-top: 2rem;
+
+      .btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.2s ease;
+        font-size: 1.1rem;
+
+        &:hover:not(:disabled) {
+          background-color: #2980b9;
+        }
+
+        &:disabled {
+          background-color: #95a5a6;
+          cursor: not-allowed;
+          opacity: 0.7;
+        }
+
+        &.btn-lg {
+          padding: 1rem 2rem;
+          font-size: 1.2rem;
+        }
+
+        &.btn-primary {
+          background-color: #3498db;
+        }
+
+        &.btn-primary:hover:not(:disabled) {
+          background-color: #2980b9;
+        }
+      }
+    }
+  }
+
+  // Responsive design
+  @media (max-width: 768px) {
+    .page-header {
+      padding: 2rem 0;
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+    }
+
+    .request-form {
+      padding: 0 1rem;
+    }
+  }
+}
