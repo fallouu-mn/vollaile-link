@@ -4,10 +4,14 @@
 
 ### Sécurité — NE JAMAIS committer
 # Identifiants base de données, JWT, téléphone admin.
-# .env.example (gabarit sans secret réel) reste versionné.
 .env
 .env.*
-!.env.example
+
+### Fichiers de travail locaux — jamais versionnés
+CLAUDE.md
+.env.example
+FRONTEND_FIXES_SUMMARY.md
+PHASE_3_SUMMARY.md
 
 ### Outils embarqués (non versionnés : on installe depuis le dépôt officiel)
 apache-maven-*/
