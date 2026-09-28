@@ -52,6 +52,9 @@
   // pour que les pages existantes ne cassent pas.
   --color-primary-50:  var(--petrol-wash);
   --color-primary-100: rgba(42,157,143,.18);
+  // Le 400 manquait : la gamme sautait de 100 à 500 et tout appel à
+  // var(--color-primary-400) était ignoré en silence par le navigateur.
+  --color-primary-400: var(--petrol-lit);
   --color-primary-500: var(--petrol);
   --color-primary-600: #238075;
   --color-primary-700: #1B6459;

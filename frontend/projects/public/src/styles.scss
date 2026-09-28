@@ -239,7 +239,9 @@ button { font-family: var(--font-sans); cursor: pointer; }
   font-size: var(--text-xs);
   font-weight: var(--font-semibold);
 
-  &.badge-success { background: #dcfce7; color: #15803d; }
+  // État positif porté par le pétrole de la palette « Le lot »,
+  // plus le vert Tailwind générique abandonné en direction artistique.
+  &.badge-success { background: var(--petrol-wash); color: var(--color-primary-700); }
   &.badge-warning { background: #fef3c7; color: #b45309; }
   &.badge-info    { background: #dbeafe; color: #1d4ed8; }
   &.badge-neutral { background: #f3f4f6; color: #374151; }
@@ -300,7 +302,7 @@ textarea {
   gap: var(--space-3);
 
   &.alert-error   { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
-  &.alert-success { background: #dcfce7; color: #166534; border-left: 4px solid #22c55e; }
+  &.alert-success { background: var(--petrol-wash); color: var(--color-primary-700); border-left: 4px solid var(--petrol); }
   &.alert-info    { background: #dbeafe; color: #1e40af; border-left: 4px solid #3b82f6; }
 }
 

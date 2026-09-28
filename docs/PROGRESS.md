@@ -132,3 +132,61 @@
 - [x] Correction des imports Standalone Angular Material (`MatGridListModule`, `MatFormFieldModule`, `MatSelectModule`, `MatInputModule`, `MatIconModule`, etc.) dans les composants Admin
 - [x] Ajout des DTOs/services manquants (`ZoneLivraisonDTO`, `ZoneLivraisonService`) et typage TypeScript strict des composants Admin
 - [x] Verification de la compilation de l'application Admin Angular (`npx ng build admin`)
+
+## Phase 9 : Landing page publique (« Le lot »)
+> Direction artistique assumée : le vocabulaire du marché de gros plutôt que le
+> langage SaaS générique. L'objectif est une page qui donne envie de rester,
+> pas un gabarit bootstrapé.
+
+**Identité visuelle**
+
+- [x] Palette délaçant le vert Tailwind `#22c55e` (green-500) : encre `#141019`, safran `#F2A33C`, pétrole `#2A9D8F` (disponible), argile `#B4453A` (épuisé), os `#F7F4EF`
+- [x] Typographie : Bricolage Grotesque (titres), Instrument Sans (texte), JetBrains Mono (prix, poids, quantités)
+- [x] Anciens tokens rétrocompatibles (`--color-primary-*`) pointant sur la nouvelle palette
+- [x] `--color-primary-400` recréé : la gamme sautait de 100 à 500, la propriété appelée était ignorée en silence
+- [x] `.badge-success` / `.alert-success` convertis au pétrole, `#22c55e` résiduel retiré du style actif
+- [x] `theme-color` de l'en-tête HTML aligné sur l'encre (`#141019`)
+
+**Structure de la page**
+
+- [x] Shell complet remplacé le gabarit Angular CLI : en-tête collant, navigation, progression de lecture, menu mobile en feuille, pied de page
+- [x] Hero asymétrique (grille 1,15fr / 0,85fr) avec titre équilibré par `text-wrap: balance`
+- [x] Bandeau chiffré, rail de processus en 3 étapes, section encre de cadrage, appel final
+- [x] Sections **Disponibilités** alimentées par la vraie API publique (`/api/public/offers`), avec états vide / chargement / erreur distincts
+- [x] Élément signature **`app-lot-meter`** : rend visible la règle `disponible = total − réservé − vendu`
+- [x] `theme-color` et `lang="fr"` vérifiés
+
+**Mouvement**
+
+- [x] Séquence d'ouverture du hero orchestrée en pur CSS (délais d'animation) — fonctionne au rendu serveur, sans JavaScript
+- [x] Segments du meter remplis dans l'ordre de la règle qu'ils illustrent (disponible → réservé → vendu)
+- [x] Révélation au défilement par directive `IntersectionObserver` (`RevealDirective`), sûre au rendu serveur : sans JavaScript le contenu reste visible
+- [x] `prefers-reduced-motion: reduce` respecté — le meter conserve son état final car c'est de l'information, pas de la décoration
+
+**Défauts trouvés et corrigés en cours de route**
+
+- [x] **Proxy de dev absent sur `public`** : le landing ne pouvait jamais charger de lots en développement
+- [x] **Proxy configuré en glob `/api/*`** — le dev-server Angular est basé sur Vite, dont le proxy fonctionne par **préfixe** : les requêtes ne partaient jamais. Corrigé en `/api` et appliqué aussi à `admin`
+- [x] Signaux Angular non déwrappés dans les liaisons (`menuOpen` → `menuOpen()`) : le menu mobile s'ouvrait tout seul
+- [x] Débordement horizontal sur mobile : enfants de grille et `main` en `min-width: auto` ne pouvaient pas rétrécir
+- [x] Titre du hero retaillé pour tenir à 360 px, `white-space: nowrap` supprimé (il empêchait la césure)
+- [x] Dédoublonnage de l'espacement avant le pied de page (environ 200 px de vide)
+- [x] Budget `anyComponentStyle` du projet `public` relevé à 16/24 kB (`admin` conservé à 4/8 kB)
+- [x] Diagnostic d'accessibilité : `aria-label` appelé sur un signal, `aria-hidden` sur un élément focusable
+- [x] Intégrité UTF-8 vérifiée sur les fichiers édités (0 caractère parasite, 0 `U+FFFD`)
+
+**État à ce jour**
+
+- [x] `npx ng build public` et `npx ng build admin` verts
+- [ ] Contrôle visuel navigateur complet (responsive, focus clavier, absence de mojibake) — **non fait**
+- [ ] Le numéro WhatsApp reste à saisir dans `volaille-link.config.ts` (champ volontairement vide)
+- [ ] Projet **non terminé** : cette phase ne clôt aucune recette
+
+## Déploiement GitHub
+
+- [x] Dépôt unique `fallouu-mn/vollaile-link` (le dépôt Git imbriqué `frontend/.git` a été retiré : le code Angular est versionné avec le backend, pas comme un pointeur vide)
+- [x] `.gitignore` dédié : `.env`, `.env.*`, `docker-compose.yml`, `apache-maven-*/`, `*.jar`, `*.zip`, `*.bak`, `.claude/`
+- [x] `.env` vérifié comme non versionné (`git check-ignore`)
+- [x] Scan de secrets avant envoi — aucune donnée sensible réelle (seuls des mots de passe de test dans des fichiers de test)
+- [x] Outillage Maven embarqué et archives exclus (~28 Mo sur 38,8 Mo proposés n'étaient pas du code)
+- [x] 186 fichiers Angular présents dans l'arbre distant
